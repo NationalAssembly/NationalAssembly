@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div id="content"></div>
+
+<script>
+  const url = window.location.pathname;
+
+  let file;
+
+  if (url.includes("/cs/")) {
+    file = "cs.html";
+  } else if (url.includes("/en/")) {
+    file = "en.html";
+  } else {
+    file = "default.html";
+  }
+
+  fetch(file)
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById("content").innerHTML = html;
+    });
+</script>
+</body>
+</html>
