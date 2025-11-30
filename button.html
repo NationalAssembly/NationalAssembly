@@ -1,0 +1,76 @@
+<div class="language-selector">
+  <div class="dropdown" id="langDropdown">
+    <button class="dropbtn">🌐 Jazyk</button>
+    <div class="dropdown-content">
+      <button data-lang="cz">🇨🇿 Česky</button>
+      <button data-lang="en">🇬🇧 English</button>
+      <button data-lang="de">🇩🇪 Deutsch</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.language-selector {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 100;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  min-width: 140px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.dropdown-content button {
+  background-color: white;
+  color: black;
+  padding: 8px 12px;
+  text-align: left;
+  border: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-content button:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown.show .dropdown-content {
+  display: block;
+}
+
+.flag {
+  font-size: 16px;
+}
+</style>
+
