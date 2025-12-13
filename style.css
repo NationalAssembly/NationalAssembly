@@ -19,3 +19,31 @@
 .article p {
   margin-bottom: 1rem;
 }
+
+.blue {
+  background-color: blue;
+  padding: 1rem;
+}
+
+.red-block {
+  background: linear-gradient(135deg, #f87171, #ef4444); /* jemný gradient */
+  color: #fff;
+  padding: 1.5rem 2rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Jemný efekt při hover */
+.red-block:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+}
+
+/* Pro lepší čitelnost odstavců uvnitř */
+.red-block p {
+  margin: 0;
+}
