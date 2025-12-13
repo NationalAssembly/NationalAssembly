@@ -1,8 +1,13 @@
 function loadLocalizedContent(prechod) {
   const params = new URLSearchParams(window.location.search);
-  const lang = params.has("en") ? "en" : "cz";
+  const lang = params.has("en") ? "en" : params.has("de")? "de" : "cz";
 
-  let file = lang === "cz" ? `cz/${prechod}.html` : `en/${prechod}.html`;
+let file =
+  lang === "cz"
+    ? `cz/${prechod}.html`
+    : lang === "de"
+    ? `de/${prechod}.html`
+    : `en/${prechod}.html`;
 
   fetch(file)
     .then((r) => r.text())
