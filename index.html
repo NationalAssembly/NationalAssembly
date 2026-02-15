@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freedom Project</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Horní černá lišta -->
+    <header>
+        <div class="logo" onclick="navigateTo('home')">
+            FREEDOM<span class="red-text">PROJECT</span>
+        </div>
+
+        <nav>
+            <div class="dropdown">
+                <button class="dropbtn">GERMANY</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="navigateTo('germany_na')">National Assembly</a>
+                    <a href="#" onclick="navigateTo('germany_weimar')">Weimar Republic</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">CZECHOSLOVAKIA</button>
+                <div class="dropdown-content">
+                    <a href="#" onclick="navigateTo('cz_first')">First Republic</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="lang-switch">
+            <div class="dropdown">
+                <button class="dropbtn" id="currentLangBtn">LANG</button>
+                <div class="dropdown-content right-align">
+                    <a href="#" onclick="switchLanguage('cz')">🇨🇿 Česky</a>
+                    <a href="#" onclick="switchLanguage('en')">🇬🇧 English</a>
+                    <a href="#" onclick="switchLanguage('de')">🇩🇪 Deutsch</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hlavní obsah -->
+    <main id="content"></main>
+
+    <script src="script.js"></script>
+</body>
+</html>

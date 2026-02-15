@@ -1,0 +1,134 @@
+/* Reset a základní nastavení */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #121212; /* Tmavé pozadí obsahu */
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+}
+
+/* Typografie */
+h1, h2, h3 {
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+h1 {
+    font-size: 3rem;
+    border-bottom: 4px solid #ff0000; /* Červené podtržení */
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.red-text {
+    color: #ff0000;
+}
+
+/* Header */
+header {
+    background-color: #000000; /* Sytě černá */
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-bottom: 2px solid #ff0000;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-family: 'Impact', sans-serif;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: white;
+    user-select: none;
+}
+
+/* Navigace a Dropdowny */
+nav {
+    display: flex;
+    gap: 20px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: transparent;
+    color: white;
+    padding: 10px 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: 'Arial Black', sans-serif;
+    border-radius: 0; /* Ostré hrany */
+    transition: color 0.3s;
+}
+
+.dropbtn:hover, .dropdown:hover .dropbtn {
+    color: #ff0000;
+}
+
+/* Dropdown obsah */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #000000;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+    z-index: 1;
+    border: 1px solid #333;
+    border-top: 2px solid #ff0000;
+}
+
+.dropdown-content.right-align {
+    right: 0;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.dropdown-content a:hover {
+    background-color: #ff0000;
+    color: black;
+}
+
+/* Zobrazení dropdownu při hoveru (desktop) i při třídě .show (mobil) */
+.dropdown:hover .dropdown-content, .dropdown-content.show {
+    display: block;
+}
+
+/* Obsah stránky */
+#content {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+img, iframe {
+    max-width: 100%;
+    border: 2px solid #333;
+    display: block;
+    margin: 20px 0;
+    border-radius: 0; /* Žádné zaoblené rohy */
+}

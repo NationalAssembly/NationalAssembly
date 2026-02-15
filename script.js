@@ -1,97 +1,75 @@
-function loadLocalizedContent(prechod) {
+document.addEventListener("DOMContentLoaded", () => {
+  loadContent();
+  setupMobileMenu();
+});
+
+function loadContent() {
   const params = new URLSearchParams(window.location.search);
   
-  let lang;
-  
-  // Kontrola URL parametrů - explicitní nastavení má prioritu
-  if (params.has("en")) {
-    lang = "en";
-  } else if (params.has("de")) {
-    lang = "de";
-  } else if (params.has("cz")) {
-    lang = "cz";
-  } else {
-    // Detekce jazyka prohlížeče, pokud není explicitně nastaveno
+  // 1. Zjistit jazyk (URL param -> localStorage -> browser -> fallback 'en')
+  let lang = params.get("lang");
+  if (!lang) {
     const browserLang = navigator.language.toLowerCase().substring(0, 2);
-    if (browserLang === "cs") {
-      lang = "cz";
-    } else if (browserLang === "de") {
-      lang = "de";
-    } else {
-      lang = "en"; // fallback na angličtinu
-    }
+    lang = (browserLang === "cs" || browserLang === "cz") ? "cz" : (browserLang === "de" ? "de" : "en");
   }
+  
+  // 2. Zjistit stránku (default 'home')
+  const page = params.get("page") || "home";
 
-let file =
-  lang === "cz"
-    ? `cz/${prechod}.html`
-    : lang === "de"
-    ? `de/${prechod}.html`
-    : `en/${prechod}.html`;
+  // Aktualizace tlačítka jazyka
+  const langBtn = document.getElementById("currentLangBtn");
+  if (langBtn) langBtn.textContent = lang.toUpperCase();
+
+  // Sestavení cesty k souboru
+  const file = `${lang}/${page}.html`;
 
   fetch(file)
-    .then((r) => r.text())
+    .then((r) => {
+      if (!r.ok) throw new Error("Page not found");
+      return r.text();
+    })
     .then((html) => {
       const c = document.getElementById("content");
       if (c) c.innerHTML = html;
+    })
+    .catch(() => {
+      document.getElementById("content").innerHTML = "<h1>404 - Content not found</h1>";
     });
+}
 
-  const btn = document.getElementById("switchLang");
-  if (btn) {
-    btn.addEventListener("click", () => {
-      const base = window.location.origin + window.location.pathname;
-      window.location.href = lang === "cz" ? base + "?en" : base;
+function navigateTo(page) {
+  const params = new URLSearchParams(window.location.search);
+  let lang = params.get("lang") || "en"; // zachovat aktuální jazyk
+  
+  // Aktualizace URL bez reloadu (SPA feel) nebo s reloadem
+  // Pro jednoduchost a funkčnost zpětného tlačítka použijeme přiřazení location
+  window.location.search = `?lang=${lang}&page=${page}`;
+}
+
+function switchLanguage(newLang) {
+  const params = new URLSearchParams(window.location.search);
+  const page = params.get("page") || "home"; // zachovat aktuální stránku
+  
+  window.location.search = `?lang=${newLang}&page=${page}`;
+}
+
+function setupMobileMenu() {
+  // Pro mobilní zařízení: kliknutí na tlačítko dropdownu ho otevře/zavře
+  const dropdowns = document.querySelectorAll(".dropdown .dropbtn");
+  dropdowns.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      // Na desktopu (hover) to řeší CSS, ale na mobilu potřebujeme click
+      // Zabráníme navigaci, pokud by to byl odkaz
+      e.stopPropagation();
+      const content = btn.nextElementSibling;
+      content.classList.toggle("show");
     });
-  }
-}
-
-function toggleDropdown() {
-  document.getElementById("langDropdown").classList.toggle("show");
-}
-
-function setLanguage(lang) {
-  const base = window.location.origin + window.location.pathname;
-  if (lang === "cz") window.location.href = base + "?cz";
-  else if (lang === "en") window.location.href = base + "?en";
-  else if (lang === "de") window.location.href = base + "?de";
-}
-
-// Zavření dropdownu při kliknutí mimo
-window.addEventListener("click", function (event) {
-  if (!event.target.matches(".dropbtn")) {
-    const dropdowns = document.getElementsByClassName("dropdown");
-    for (let i = 0; i < dropdowns.length; i++) {
-      dropdowns[i].classList.remove("show");
+  });
+  
+  // Zavření při kliku jinam
+  window.addEventListener("click", (e) => {
+    if (!e.target.matches('.dropbtn')) {
+      document.querySelectorAll(".dropdown-content").forEach(c => c.classList.remove("show"));
     }
-  }
-});
-
-function languageButton() {
-  // Načti a vlož tlačítko
-  fetch("button.html")
-    .then((r) => r.text())
-    .then((html) => {
-      const div = document.createElement("div");
-      div.innerHTML = html;
-      document.body.appendChild(div);
-
-      // Připoj event listener pro dropdown
-      const dropdown = document.getElementById("langDropdown");
-      const dropbtn = dropdown.querySelector(".dropbtn");
-      dropbtn.addEventListener("click", () =>
-        dropdown.classList.toggle("show")
-      );
-
-      // Připoj event listenery pro jednotlivé jazyky
-      const buttons = dropdown.querySelectorAll(".dropdown-content button");
-      buttons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const lang = btn.dataset.lang;
-          const base = window.location.origin + window.location.pathname;
-          if (lang === "cz") window.location.href = base + "?cz";
-          else if (lang === "en") window.location.href = base + "?en";
-          else if (lang === "de") window.location.href = base + "?de";
-        });
-      });
-    });
+  });
 }
