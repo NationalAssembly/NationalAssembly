@@ -1,6 +1,26 @@
 function loadLocalizedContent(prechod) {
   const params = new URLSearchParams(window.location.search);
-  const lang = params.has("en") ? "en" : params.has("de")? "de" : "cz";
+  
+  let lang;
+  
+  // Kontrola URL parametrů - explicitní nastavení má prioritu
+  if (params.has("en")) {
+    lang = "en";
+  } else if (params.has("de")) {
+    lang = "de";
+  } else if (params.has("cz")) {
+    lang = "cz";
+  } else {
+    // Detekce jazyka prohlížeče, pokud není explicitně nastaveno
+    const browserLang = navigator.language.toLowerCase().substring(0, 2);
+    if (browserLang === "cs") {
+      lang = "cz";
+    } else if (browserLang === "de") {
+      lang = "de";
+    } else {
+      lang = "en"; // fallback na angličtinu
+    }
+  }
 
 let file =
   lang === "cz"
@@ -31,7 +51,7 @@ function toggleDropdown() {
 
 function setLanguage(lang) {
   const base = window.location.origin + window.location.pathname;
-  if (lang === "cz") window.location.href = base;
+  if (lang === "cz") window.location.href = base + "?cz";
   else if (lang === "en") window.location.href = base + "?en";
   else if (lang === "de") window.location.href = base + "?de";
 }
@@ -68,7 +88,7 @@ function languageButton() {
         btn.addEventListener("click", () => {
           const lang = btn.dataset.lang;
           const base = window.location.origin + window.location.pathname;
-          if (lang === "cz") window.location.href = base;
+          if (lang === "cz") window.location.href = base + "?cz";
           else if (lang === "en") window.location.href = base + "?en";
           else if (lang === "de") window.location.href = base + "?de";
         });
