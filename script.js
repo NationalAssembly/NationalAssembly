@@ -10,21 +10,27 @@ const uiTranslations = {
     czechoslovakia: "CZECHOSLOVAKIA",
     na: "National Assembly",
     weimar: "Weimar Republic",
-    first_rep: "First Republic"
+    first_rep: "First Republic",
+    code: "Code",
+    content: "Content"
   },
   cz: {
     germany: "NĚMECKO",
     czechoslovakia: "ČESKOSLOVENSKO",
     na: "Národní shromáždění",
     weimar: "Výmarská republika",
-    first_rep: "První republika"
+    first_rep: "První republika",
+    code: "Kód",
+    content: "Obsah"
   },
   de: {
     germany: "DEUTSCHLAND",
     czechoslovakia: "TSCHECHOSLOWAKEI",
     na: "Nationalversammlung",
     weimar: "Weimarer Republik",
-    first_rep: "Erste Republik"
+    first_rep: "Erste Republik",
+    code: "Code",
+    content: "Inhalt"
   }
 };
 
