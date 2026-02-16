@@ -46,6 +46,21 @@ header {
     z-index: 1000;
 }
 
+/* Hamburger Menu (Mobile) */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    transition: 0.3s;
+}
+
 .logo {
     font-family: 'Impact', sans-serif;
     font-size: 1.8rem;
@@ -63,6 +78,7 @@ nav {
 .dropdown {
     position: relative;
     display: inline-block;
+    text-align: center;
 }
 
 .dropbtn {
@@ -88,15 +104,21 @@ nav {
     display: none;
     position: absolute;
     background-color: #000000;
-    min-width: 200px;
+    min-width: auto;
+    width: max-content; /* Adapt width to text */
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
     z-index: 1;
     border: 1px solid #333;
     border-top: 2px solid #ff0000;
+    /* Centering relative to parent */
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .dropdown-content.right-align {
     right: 0;
+    left: auto;
+    transform: none;
 }
 
 .dropdown-content a {
@@ -113,8 +135,8 @@ nav {
     color: black;
 }
 
-/* Zobrazení dropdownu při hoveru (desktop) i při třídě .show (mobil) */
-.dropdown:hover .dropdown-content, .dropdown-content.show {
+/* Show dropdown when active */
+.dropdown-content.show {
     display: block;
 }
 
@@ -131,4 +153,120 @@ img, iframe {
     display: block;
     margin: 20px 0;
     border-radius: 0; /* Žádné zaoblené rohy */
+}
+
+footer {
+    background-color: #000000;
+    color: #888;
+    padding: 30px 20px;
+    border-top: 2px solid #ff0000;
+    margin-top: 60px;
+    font-size: 0.9rem;
+}
+
+footer .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.github-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+footer a {
+    color: #ff0000;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.chevron {
+    display: none; /* Hidden on desktop */
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    header {
+        justify-content: space-between;
+    }
+
+    .hamburger {
+        display: flex;
+        order: 1;
+    }
+
+    .logo {
+        order: 2;
+        margin: 0 auto; /* Center logo */
+    }
+
+    .lang-switch {
+        order: 3;
+    }
+
+    nav {
+        display: none; /* Hidden by default */
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: #000000;
+        flex-direction: column;
+        padding: 20px 0;
+        border-bottom: 2px solid #ff0000;
+    }
+
+    nav.active {
+        display: flex;
+    }
+
+    nav .dropdown {
+        width: 100%;
+        text-align: left;
+    }
+
+    nav .dropbtn {
+        width: 100%;
+        text-align: left;
+        padding-left: 20px;
+    }
+
+    nav .dropdown-content {
+        position: static;
+        transform: none;
+        width: 100%;
+        border: none;
+        padding-left: 20px; /* Indentation for structure */
+        box-shadow: none;
+    }
+
+    footer .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .chevron {
+        display: inline-block;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        padding: 3px;
+        transform: rotate(45deg); /* Points down */
+        transition: transform 0.3s;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+
+    .dropbtn.active .chevron {
+        transform: rotate(-135deg); /* Points up */
+    }
 }
