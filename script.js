@@ -83,7 +83,11 @@ function applyTranslations(lang) {
 
 function navigateTo(page) {
   const params = new URLSearchParams(window.location.search);
-  let lang = params.get("lang") || "en";
+  let lang = params.get("lang");
+  if (!lang) {
+    const browserLang = navigator.language.toLowerCase().substring(0, 2);
+    lang = (browserLang === "cs" || browserLang === "cz") ? "cz" : (browserLang === "de" ? "de" : "en");
+  }
   window.location.search = `?lang=${lang}&page=${page}`;
 }
 
