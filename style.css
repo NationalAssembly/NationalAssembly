@@ -3,6 +3,7 @@
     --accent-color: #ec9706;
 }
 
+
 /* Reset a základní nastavení */
 * {
     box-sizing: border-box;
@@ -10,11 +11,13 @@
     padding: 0;
 }
 
+/* Zbytek CSS zůstává stejný... */
 body {
     background-color: #121212; /* Tmavé pozadí obsahu */
     color: #e0e0e0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
+    cursor: url('cursor.png'), pointer; /* Změna kurzoru na vlastní obrázek */
 }
 
 /* Typografie */
@@ -55,7 +58,7 @@ header {
 .hamburger {
     display: none;
     flex-direction: column;
-    cursor: pointer;
+
     gap: 5px;
 }
 
@@ -69,7 +72,7 @@ header {
 .logo {
     font-family: 'Anton', 'Arial Black', sans-serif;
     font-size: 2.1rem;
-    cursor: pointer;
+
     color: white;
     user-select: none;
 }
@@ -92,7 +95,7 @@ nav {
     padding: 10px 15px;
     font-size: 1.5rem;
     border: none;
-    cursor: pointer;
+
     text-transform: uppercase;
     font-family: 'Anton', 'Arial Black', sans-serif;
     border-radius: 0; /* Ostré hrany */
@@ -273,4 +276,5 @@ footer a:hover {
     .dropbtn.active .chevron {
         transform: rotate(-135deg); /* Points up */
     }
+
 }
