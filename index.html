@@ -48,6 +48,16 @@
         </div>
     </header>
 
+    <!-- Časová osa — mezi headerem a obsahem, na celou šířku -->
+    <div class="timeline-container">
+        <iframe
+            src="timeline/timeline.html"
+            style="width:100%; border:none; display:block;"
+            scrolling="no"
+            onload="this.style.height = this.contentDocument.body.scrollHeight + 'px'">
+        </iframe>
+    </div>
+
     <main id="content"></main>
 
     <footer>
