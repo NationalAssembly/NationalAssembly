@@ -34,17 +34,19 @@ const uiTranslations = {
   }
 };
 
-function loadContent() {
+function getCurrentLang() {
   const params = new URLSearchParams(window.location.search);
-  
-  // 1. Detect language
   let lang = params.get("lang");
   if (!lang) {
     const browserLang = navigator.language.toLowerCase().substring(0, 2);
     lang = (browserLang === "cs" || browserLang === "cz") ? "cz" : (browserLang === "de" ? "de" : "en");
   }
-  
-  // 2. Detect page
+  return lang;
+}
+
+function loadContent() {
+  const params = new URLSearchParams(window.location.search);
+  const lang = getCurrentLang();
   const page = params.get("page") || "home";
 
   // Update language button text
@@ -53,6 +55,9 @@ function loadContent() {
 
   // Apply static UI translations
   applyTranslations(lang);
+
+  // Notify iframe (may already be loaded)
+  notifyTimeline(lang);
 
   // Build file path
   const file = `${lang}/${page}.html`;
@@ -81,19 +86,28 @@ function applyTranslations(lang) {
   });
 }
 
+function notifyTimeline(lang) {
+  const frame = document.getElementById('timelineFrame');
+  if (!frame) return;
+
+  // Iframe může ještě načítat — pošleme zprávu po onload i hned
+  const msg = { type: 'setLanguage', lang: lang.toUpperCase() };
+  try { frame.contentWindow.postMessage(msg, '*'); } catch(e) {}
+  frame.addEventListener('load', function onLoad() {
+    frame.contentWindow.postMessage(msg, '*');
+    frame.removeEventListener('load', onLoad);
+  });
+}
+
 function navigateTo(page) {
-  const params = new URLSearchParams(window.location.search);
-  let lang = params.get("lang");
-  if (!lang) {
-    const browserLang = navigator.language.toLowerCase().substring(0, 2);
-    lang = (browserLang === "cs" || browserLang === "cz") ? "cz" : (browserLang === "de" ? "de" : "en");
-  }
+  const lang = getCurrentLang();
   window.location.search = `?lang=${lang}&page=${page}`;
 }
 
 function switchLanguage(newLang) {
   const params = new URLSearchParams(window.location.search);
   const page = params.get("page") || "home";
+  // Změna URL přenačte stránku — loadContent() pak zavolá notifyTimeline()
   window.location.search = `?lang=${newLang}&page=${page}`;
 }
 
@@ -108,19 +122,16 @@ function setupNavigation() {
   const dropdowns = document.querySelectorAll(".dropdown");
   const isMobile = window.innerWidth <= 768;
 
-  // Hamburger toggle
   if (hamburger) {
     hamburger.addEventListener("click", () => {
       nav.classList.toggle("active");
     });
   }
 
-  // Dropdown logic
   dropdowns.forEach(btn => {
     const button = btn.querySelector(".dropbtn");
     const content = btn.querySelector(".dropdown-content");
 
-    // Pre-expand on mobile if it's a nav item
     if (isMobile && btn.parentElement.id === "mainNav") {
       content.classList.add("show");
       button.classList.add("active");
@@ -128,26 +139,22 @@ function setupNavigation() {
 
     button.addEventListener("click", (e) => {
       e.stopPropagation();
-      
       const isOpen = content.classList.contains("show");
 
-      // Close all others
       if (!isMobile) {
         document.querySelectorAll(".dropdown-content").forEach(c => {
-            if (c !== content) c.classList.remove("show");
+          if (c !== content) c.classList.remove("show");
         });
         document.querySelectorAll(".dropbtn").forEach(b => {
-            if (b !== button) b.classList.remove("active");
+          if (b !== button) b.classList.remove("active");
         });
       }
 
-      // Toggle current
       content.classList.toggle("show");
       button.classList.toggle("active");
     });
   });
-  
-  // Close when clicking outside
+
   window.addEventListener("click", (e) => {
     if (!e.target.closest('.dropdown')) {
       document.querySelectorAll(".dropdown-content").forEach(c => c.classList.remove("show"));

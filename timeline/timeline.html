@@ -23,7 +23,7 @@
 
 
 <script>
-const language       = "CZ";
+let language = "CZ"; 
 const first_position = "";
 
 const EV_SPACING = 25;
@@ -302,6 +302,15 @@ wrap.addEventListener('wheel', e => {
 }, { passive: false });
 
 render();
+
+window.addEventListener('message', function(event) {
+  if (event.data && event.data.type === 'setLanguage') {
+    language = event.data.lang.toUpperCase(); // CZ, DE, EN
+    console.log(language);
+    render();
+  }
+});
+
 </script>
 </body>
 </html>
