@@ -25,7 +25,7 @@
   /* ── Pozadí ── */
   --bg:           #121212;      /* téměř černá s oranžovým nádechem */
   --bg2:          #221800;
-  --bg3:          #2e2100;
+  --bg3:          #6182c0;
 
   /* ── Text ── */
   --text:         #f5e8cc;
@@ -276,10 +276,12 @@ a.ev-label-link:hover .ltitle { text-decoration: underline; }
 .tooltip.de {
   border-color: var(--top-color-dark);
   box-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 0 1px var(--top-color-glow) inset;
+  background: var(--bg2); 
 }
 .tooltip.cz {
   border-color: var(--bot-color-dark);
   box-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 0 1px var(--bot-color-glow) inset;
+   background: var(--bg3); 
 }
 
 .tt-date {

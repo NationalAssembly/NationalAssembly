@@ -271,7 +271,8 @@ const tipTitle = document.getElementById('tipTitle');
 function showTip(e, ev) {
   tipDate.textContent  = fmtDate(e.date);
   tipTitle.textContent = e.title;
-  tip.classList.add('vis');
+  tip.classList.remove('de', 'cz');
+  tip.classList.add('vis', e.country === 'CZ' ? 'cz' : 'de');
   moveTip(ev);
 }
 function moveTip(ev) {
