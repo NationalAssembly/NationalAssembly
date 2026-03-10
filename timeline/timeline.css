@@ -1,0 +1,320 @@
+/* timeline.css — oranžová paleta kolem #ec9706 */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:wght@300;400;600&display=swap');
+
+:root {
+  /* ── Oranžová paleta ── */
+  --accent:       #ec9706;      /* hlavní oranžová */
+  --accent-light: #f5bc48;      /* světlá oranžová */
+  --accent-dark:  #b87004;      /* tmavá oranžová */
+  --accent-deep:  #7a4500;      /* velmi tmavá, skoro hnědá */
+  --accent-glow:  rgba(236, 151, 6, 0.25);
+
+  /* ── Barvy horní poloviny (DE) — upravujte zde ── */
+  --top-color:       #ec9706;
+  --top-color-light: #f5bc48;
+  --top-color-dark:  #b87004;
+  --top-color-glow:  rgba(236, 151, 6, 0.25);
+
+  /* ── Barvy dolní poloviny (CZ) — upravujte zde ── */
+  --bot-color:       #3806ec;
+  --bot-color-light: #6248f5;
+  --bot-color-dark:  #5204b8;
+  --bot-color-glow:  rgba(125, 6, 236, 0.25);
+
+  /* ── Pozadí ── */
+  --bg:           #1a1200;      /* téměř černá s oranžovým nádechem */
+  --bg2:          #221800;
+  --bg3:          #2e2100;
+
+  /* ── Text ── */
+  --text:         #f5e8cc;
+  --text-mid:     #c8a85a;
+  --text-faint:   #7a6030;
+
+  /* ── Osa & linie ── */
+  --axis:         #ec9706;
+  --line:         #5a3e00;
+}
+
+/* ─── RESET ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Pro', serif;
+  min-height: 100vh;
+}
+
+/* Paper/noise texture overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── HEADER ─────────────────────────────────────────────── */
+header {
+  position: relative; z-index: 10;
+  text-align: center;
+  padding: 2.4rem 2rem 1.6rem;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+}
+
+header::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent-dark), var(--accent), var(--accent-light), var(--accent), var(--accent-dark), transparent);
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.3rem, 3.2vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+
+header h1 .accent { color: var(--accent); }
+
+header p {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  color: var(--text-mid);
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+/* ─── SCROLL HINT ────────────────────────────────────────── */
+.scroll-hint {
+  position: relative; z-index: 10;
+  text-align: center;
+  padding: 0.4rem;
+  font-size: 0.76rem;
+  color: var(--text-faint);
+  font-style: italic;
+  letter-spacing: 0.07em;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--line);
+}
+
+/* ─── TIMELINE WRAPPER ───────────────────────────────────── */
+.tl-wrap {
+  position: relative; z-index: 5;
+  overflow-x: auto;
+  overflow-y: hidden;
+  cursor: grab;
+  user-select: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-dark) var(--bg2);
+}
+.tl-wrap::-webkit-scrollbar { height: 6px; }
+.tl-wrap::-webkit-scrollbar-track { background: var(--bg2); }
+.tl-wrap::-webkit-scrollbar-thumb { background: var(--accent-dark); border-radius: 3px; }
+.tl-wrap:active { cursor: grabbing; }
+
+.tl-inner { position: relative; }
+
+/* ─── AXIS ───────────────────────────────────────────────── */
+.axis-line { display: none; } /* replaced by seg-line */
+
+/* ─── SEGMENT LINE (čára pro každý rok-segment) ──────────── */
+.seg-line {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-dark), var(--accent) 30%, var(--accent) 70%, var(--accent-dark));
+  box-shadow: 0 0 6px var(--accent-glow);
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+/* ─── GAP LINE (spojovací čára mezi roky) ────────────────── */
+.gap-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-dark) 0%, var(--accent-dark) 100%);
+  opacity: 0.45;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+/* ─── YEAR MARKERS ───────────────────────────────────────── */
+.yr {
+  position: absolute;
+  display: flex; flex-direction: column; align-items: center;
+  transform: translateX(-50%);
+  z-index: 6;
+}
+.yr-tick {
+  display: none; /* tick skryt — label je přímo na ose */
+}
+.yr-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  white-space: nowrap;
+  /* vertikálně vystředit na osu */
+  transform: translateY(-50%);
+  background: var(--bg);
+  padding: 0 5px;
+  line-height: 1;
+}
+
+/* ─── EVENT ELEMENTS ─────────────────────────────────────── */
+.ev {
+  position: absolute;
+  z-index: 4;
+  cursor: pointer;
+  transform: translateX(-50%);
+}
+
+/* connector line */
+.ev-line {
+  position: absolute;
+  width: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.2s;
+}
+.ev.top .ev-line {
+  background: linear-gradient(180deg, var(--top-color-glow) 0%, var(--top-color) 100%);
+}
+.ev.bottom .ev-line {
+  background: linear-gradient(0deg, var(--bot-color-glow) 0%, var(--bot-color) 100%);
+}
+
+/* dot */
+.ev-dot {
+  position: absolute;
+  width: 9px; height: 9px; border-radius: 50%;
+  left: 50%; transform: translateX(-50%);
+  border: 2px solid var(--bg);
+  transition: transform 0.2s, box-shadow 0.2s;
+  z-index: 5;
+}
+.ev.top .ev-dot {
+  background: var(--top-color);
+  box-shadow: 0 0 0 1px var(--top-color), 0 0 10px var(--top-color-glow);
+}
+.ev.bottom .ev-dot {
+  background: var(--bot-color);
+  box-shadow: 0 0 0 1px var(--bot-color), 0 0 10px var(--bot-color-glow);
+}
+.ev.top:hover .ev-dot,
+.ev.top .ev-label:hover ~ .ev-dot,
+.ev.top:has(.ev-label:hover) .ev-dot {
+  transform: translateX(-50%) scale(1.7);
+  box-shadow: 0 0 0 1px var(--top-color-light), 0 0 16px var(--top-color);
+}
+.ev.bottom:hover .ev-dot,
+.ev.bottom:has(.ev-label:hover) .ev-dot {
+  transform: translateX(-50%) scale(1.7);
+  box-shadow: 0 0 0 1px var(--bot-color-light), 0 0 16px var(--bot-color);
+}
+
+/* angled label */
+.ev-label {
+  position: absolute;
+  white-space: nowrap;
+  display: flex; flex-direction: column; gap: 2px;
+  pointer-events: auto;
+  color: var(--text-mid);
+}
+.ev-label .ldate {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+.ev-label .ltitle {
+  font-family: 'Crimson Pro', serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+.ev.top .ev-label .ldate  { color: var(--top-color-dark); }
+.ev.top .ev-label .ltitle { color: var(--top-color-light); }
+.ev.top:hover .ev-label .ltitle,
+.ev.top .ev-label:hover .ltitle { text-decoration: underline; color: var(--top-color); }
+.ev.bottom .ev-label .ldate  { color: var(--bot-color-dark); }
+.ev.bottom .ev-label .ltitle { color: var(--bot-color-light); }
+.ev.bottom:hover .ev-label .ltitle,
+.ev.bottom .ev-label:hover .ltitle { text-decoration: underline; color: var(--bot-color); }
+
+a.ev-label-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+a.ev-label-link:hover .ltitle { text-decoration: underline; }
+
+/* ─── TOOLTIP ────────────────────────────────────────────── */
+.tooltip {
+  position: fixed; z-index: 1000;
+  background: var(--bg2);
+  border: 1px solid var(--accent-dark);
+  border-radius: 3px;
+  padding: 0.85rem 1rem;
+  max-width: 270px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 0 1px var(--accent-glow) inset;
+  color: var(--text);
+}
+.tooltip.vis { opacity: 1; }
+
+.tooltip.de {
+  border-color: var(--top-color-dark);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 0 1px var(--top-color-glow) inset;
+}
+.tooltip.cz {
+  border-color: var(--bot-color-dark);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 0 1px var(--bot-color-glow) inset;
+}
+
+.tt-date {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.25rem;
+}
+.tooltip.de .tt-date  { color: var(--top-color-dark); }
+.tooltip.cz .tt-date  { color: var(--bot-color-dark); }
+
+.tt-title {
+  font-weight: 600;
+  font-size: 0.94rem;
+  margin-bottom: 0.35rem;
+}
+.tooltip.de .tt-title { color: var(--top-color); }
+.tooltip.cz .tt-title { color: var(--bot-color); }
+
+/* ─── FADE EDGES ─────────────────────────────────────────── */
+.fade-l, .fade-r {
+  position: fixed; top: 0; bottom: 0; width: 50px;
+  pointer-events: none; z-index: 6;
+}
+.fade-l { left: 0;  background: linear-gradient(90deg,  var(--bg), transparent); }
+.fade-r { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+footer {
+  text-align: center;
+  padding: 1.2rem;
+  font-size: 0.76rem;
+  color: var(--text-faint);
+  font-style: italic;
+  border-top: 1px solid var(--line);
+  position: relative; z-index: 10;
+  background: var(--bg2);
+}

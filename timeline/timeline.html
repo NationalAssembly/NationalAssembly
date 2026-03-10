@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Časová osa</title>
+<link rel="stylesheet" href="timeline.css">
+<script src="CZdata.js"></script>
+<script src="DEdata.js"></script>
+</head>
+<body>
+
+
+
+<div class="tl-wrap" id="tlWrap"><div class="tl-inner" id="tlInner"></div></div>
+<div class="fade-l"></div>
+<div class="fade-r"></div>
+
+<div class="tooltip" id="tip">
+  <div class="tt-date"  id="tipDate"></div>
+  <div class="tt-title" id="tipTitle"></div>
+</div>
+
+
+<script>
+const language       = "CZ";
+const first_position = "";
+
+const EV_SPACING = 25;
+const SEG_PAD_L  = 30;
+const SEG_PAD_R  = 20;
+const YEAR_W     = 20;
+const ANGLE      = 42;
+const CONN_BASE  = 32;
+const CONN_BASE_TOP = 55;
+const CONN_STEP  = 22;
+const CHAR_PX    = 6.4;
+const RAD        = ANGLE * Math.PI / 180;
+
+function parseDate(s) {
+  const p = s.split('-').map(Number);
+  return new Date(p[0], (p[1]||1)-1, p[2]||1);
+}
+function fmtDate(s) {
+  const mo = ['ledna','února','března','dubna','května','června',
+              'července','srpna','září','října','listopadu','prosince'];
+  const p = s.split('-');
+  if (p.length===3) return `${+p[2]}. ${mo[+p[1]-1]} ${p[0]}`;
+  if (p.length===2) return `${mo[+p[1]-1]} ${p[0]}`;
+  return p[0];
+}
+
+function getDataset() {
+  if (language === "DE") {
+    
+    return DEdata;
+  }
+  
+  return CZdata;
+}
+
+function wrapTitle(t) {
+  if (t.length <= 16) return t;
+  const mid = Math.floor(t.length / 2);
+  let best = -1, bestDist = Infinity;
+  for (let i = 0; i < t.length; i++) {
+    if (t[i] === ' ') {
+      const d = Math.abs(i - mid);
+      if (d < bestDist) { bestDist = d; best = i; }
+    }
+  }
+  if (best === -1) return t;
+  return t.slice(0, best) + '<br>' + t.slice(best + 1);
+}
+
+function render() {
+  const inner = document.getElementById('tlInner');
+  inner.innerHTML = '';
+
+  const data = getDataset();
+  if (!data || !data.length) { inner.textContent = 'Žádná data.'; return; }
+
+  const sorted = [...data].sort((a,b) => parseDate(a.date) - parseDate(b.date));
+
+  const byYear = {};
+  sorted.forEach(e => {
+    const y = parseDate(e.date).getFullYear();
+    if (!byYear[y]) byYear[y] = [];
+    byYear[y].push(e);
+  });
+  const years = Object.keys(byYear).map(Number).sort((a,b)=>a-b);
+
+  let cursor = 20;
+  const allPlaced = [];
+  const segmentStarts = {};
+
+  years.forEach(y => {
+    const evts = byYear[y];
+    const uniqueDates = [...new Set(evts.map(e => e.date))].sort();
+    const n = uniqueDates.length;
+
+    const segLineStart = cursor + YEAR_W;
+    segmentStarts[y] = segLineStart;
+    const segLineLen  = (n + 2) * EV_SPACING;
+
+    uniqueDates.forEach((date, i) => {
+      const x = segLineStart + (i + 1) * EV_SPACING;
+      evts.filter(e => e.date === date).forEach(e => {
+        allPlaced.push({ e, x, year: y });
+      });
+    });
+
+    cursor += YEAR_W + segLineLen;
+  });
+
+  const totalW = cursor + 20;
+
+  function assignLevels(evts) {
+    const reach = [];
+    return evts.map(item => {
+      const labelTxt = item.e.title.length > fmtDate(item.e.date).length
+        ? item.e.title : fmtDate(item.e.date);
+      const hReach = item.x + labelTxt.length * CHAR_PX * Math.cos(RAD) + 8;
+      let lv = 0;
+      while (reach[lv] !== undefined && reach[lv] > item.x - 4) lv++;
+      reach[lv] = hReach;
+      return { ...item, lv };
+    });
+  }
+
+  const topItems = assignLevels(allPlaced.filter(p => (p.e.country||'DE')==='DE'));
+  const botItems = assignLevels(allPlaced.filter(p => (p.e.country||'DE')==='CZ'));
+
+  const maxTopLv = Math.max(0, ...topItems.map(p=>p.lv));
+  const maxBotLv = Math.max(0, ...botItems.map(p=>p.lv));
+
+  const LABEL_H  = 55;
+  const topLaneH = CONN_BASE_TOP + maxTopLv * CONN_STEP + LABEL_H + 40;
+  const botLaneH = CONN_BASE + maxBotLv * CONN_STEP + LABEL_H + 55;
+  const axisY    = topLaneH;
+  const totalH   = topLaneH + botLaneH;
+
+  inner.style.width  = totalW + 'px';
+  inner.style.height = totalH + 'px';
+
+  const segEnds = {};
+  years.forEach(y => {
+    const uniqueDates = [...new Set(byYear[y].map(e => e.date))];
+    const n = uniqueDates.length;
+    segEnds[y] = segmentStarts[y] + (n + 2) * EV_SPACING;
+  });
+
+  years.forEach((y, yi) => {
+    const segStart = segmentStarts[y];
+    const segEnd   = segEnds[y];
+
+    if (yi > 0) {
+      const prevEnd  = segEnds[years[yi - 1]];
+      const gapStart = prevEnd;
+      const gapEnd   = segStart - YEAR_W;
+      if (gapEnd > gapStart) {
+        const gapLine = document.createElement('div');
+        gapLine.className = 'gap-line';
+        gapLine.style.cssText = `left:${gapStart}px; top:${axisY}px; width:${gapEnd - gapStart}px;`;
+        inner.appendChild(gapLine);
+      }
+    }
+
+    const yrEl = document.createElement('div');
+    yrEl.className = 'yr';
+    yrEl.style.left = (segStart - YEAR_W) + 'px';
+    yrEl.style.top  = axisY + 'px';
+    yrEl.innerHTML  = `<span class="yr-label">${y}</span>`;
+    inner.appendChild(yrEl);
+
+    const lineEl = document.createElement('div');
+    lineEl.className = 'seg-line';
+    lineEl.style.cssText = `left:${segStart}px; top:${axisY}px; width:${segEnd - segStart}px;`;
+    inner.appendChild(lineEl);
+  });
+
+  function placeEv(item) {
+    const { e, x, lv } = item;
+    const isTop = (e.country||'DE') === 'DE';
+    const connH = (isTop ? CONN_BASE_TOP : CONN_BASE) + lv * CONN_STEP;
+
+    const el = document.createElement('div');
+    el.className = `ev ${isTop ? 'top' : 'bottom'}`;
+    el.style.left = x + 'px';
+    if (e.url) el.style.cursor = 'pointer';
+
+    if (isTop) {
+      el.style.top    = (axisY - connH - 5) + 'px';
+      el.style.height = (connH + 10) + 'px';
+
+      const line = document.createElement('div');
+      line.className = 'ev-line';
+      line.style.cssText = `top:0; height:${connH}px;`;
+      el.appendChild(line);
+
+      const dot = document.createElement('div');
+      dot.className = 'ev-dot';
+      dot.style.top = (connH - 5) + 'px';
+      el.appendChild(dot);
+
+      const label = e.url ? document.createElement('a') : document.createElement('div');
+      label.className = 'ev-label';
+      if (e.url) { label.href = e.url; label.className += ' ev-label-link'; }
+      label.style.cssText = `top:-2px; left:4px; transform:rotate(-${ANGLE}deg); transform-origin:0% 100%;`;
+      label.innerHTML = `<span class="ldate">${fmtDate(e.date)}</span><span class="ltitle">${wrapTitle(e.title)}</span>`;
+      label.addEventListener('mouseenter', ev => showTip(e, ev));
+      label.addEventListener('mousemove',  ev => moveTip(ev));
+      label.addEventListener('mouseleave',    hideTip);
+      el.appendChild(label);
+
+    } else {
+      el.style.top    = axisY + 'px';
+      el.style.height = (connH + 10) + 'px';
+
+      const dot = document.createElement('div');
+      dot.className = 'ev-dot';
+      dot.style.top = '0px';
+      el.appendChild(dot);
+
+      const line = document.createElement('div');
+      line.className = 'ev-line';
+      line.style.cssText = `top:5px; height:${connH}px;`;
+      el.appendChild(line);
+
+      const label = e.url ? document.createElement('a') : document.createElement('div');
+      label.className = 'ev-label';
+      if (e.url) { label.href = e.url; label.className += ' ev-label-link'; }
+      label.style.cssText = `top:${connH+8}px; left:4px; transform:rotate(${ANGLE}deg); transform-origin:0% 0%;`;
+      label.innerHTML = `<span class="ldate">${fmtDate(e.date)}</span><span class="ltitle">${wrapTitle(e.title)}</span>`;
+      el.appendChild(label);
+    }
+
+    if (e.url) {
+      el.addEventListener('click', () => { window.location.href = e.url; });
+    }
+
+    el.addEventListener('mouseenter', ev => showTip(e, ev));
+    el.addEventListener('mousemove',  ev => moveTip(ev));
+    el.addEventListener('mouseleave',    hideTip);
+    inner.appendChild(el);
+  }
+
+  topItems.forEach(placeEv);
+  botItems.forEach(placeEv);
+
+  const wrap = document.getElementById('tlWrap');
+  if (first_position && first_position.trim()) {
+    const target = parseDate(first_position.trim()).getTime();
+    let best = allPlaced[0];
+    allPlaced.forEach(p => {
+      if (Math.abs(parseDate(p.e.date).getTime()-target) < Math.abs(parseDate(best.e.date).getTime()-target))
+        best = p;
+    });
+    requestAnimationFrame(() => {
+      wrap.scrollLeft = Math.max(0, best.x - wrap.clientWidth / 2);
+    });
+  } else {
+    wrap.scrollLeft = 0;
+  }
+}
+
+const tip      = document.getElementById('tip');
+const tipDate  = document.getElementById('tipDate');
+const tipTitle = document.getElementById('tipTitle');
+
+function showTip(e, ev) {
+  tipDate.textContent  = fmtDate(e.date);
+  tipTitle.textContent = e.title;
+  tip.classList.add('vis');
+  moveTip(ev);
+}
+function moveTip(ev) {
+  let x = ev.clientX + 16, y = ev.clientY - 10;
+  if (x + 240 > window.innerWidth)  x = ev.clientX - 245;
+  if (y + 80  > window.innerHeight) y = ev.clientY - 85;
+  tip.style.left = x + 'px';
+  tip.style.top  = y + 'px';
+}
+function hideTip() { tip.classList.remove('vis'); }
+
+const wrap = document.getElementById('tlWrap');
+let drag = false, sx, sl;
+wrap.addEventListener('mousedown', e => {
+  drag = true; sx = e.pageX - wrap.offsetLeft; sl = wrap.scrollLeft;
+  wrap.style.cursor = 'grabbing';
+});
+document.addEventListener('mouseup', () => { drag = false; wrap.style.cursor = 'grab'; });
+wrap.addEventListener('mousemove', e => {
+  if (!drag) return;
+  e.preventDefault();
+  wrap.scrollLeft = sl - (e.pageX - wrap.offsetLeft - sx);
+});
+wrap.addEventListener('wheel', e => {
+  e.preventDefault();
+  wrap.scrollLeft += e.deltaY !== 0 ? e.deltaY : e.deltaX;
+}, { passive: false });
+
+render();
+</script>
+</body>
+</html>
