@@ -4,26 +4,26 @@
 
 :root {
   /* ── Oranžová paleta ── */
-  --accent:       #ec9706;      /* hlavní oranžová */
-  --accent-light: #f5bc48;      /* světlá oranžová */
-  --accent-dark:  #b87004;      /* tmavá oranžová */
-  --accent-deep:  #7a4500;      /* velmi tmavá, skoro hnědá */
+  --accent:       #ec9706;
+  --accent-light: #f5bc48;
+  --accent-dark:  #b87004;
+  --accent-deep:  #7a4500;
   --accent-glow:  rgba(236, 151, 6, 0.25);
 
-  /* ── Barvy horní poloviny (DE) — upravujte zde ── */
+  /* ── Barvy horní poloviny (DE) ── */
   --top-color:       #ec9706;
   --top-color-light: #f5bc48;
   --top-color-dark:  #b87004;
   --top-color-glow:  rgba(236, 151, 6, 0.25);
 
-  /* ── Barvy dolní poloviny (CZ) — upravujte zde ── */
+  /* ── Barvy dolní poloviny (CZ) ── */
   --bot-color:       #3806ec;
   --bot-color-light: #6248f5;
   --bot-color-dark:  #5204b8;
   --bot-color-glow:  rgba(125, 6, 236, 0.25);
 
   /* ── Pozadí ── */
-  --bg:           #121212;      /* téměř černá s oranžovým nádechem */
+  --bg:           #121212;
   --bg2:          #221800;
   --bg3:          #6182c0;
 
@@ -45,6 +45,10 @@ body {
   color: var(--text);
   font-family: 'Crimson Pro', serif;
   min-height: 100vh;
+  cursor: url('magnifying_glass.png'), pointer;
+}
+body, body * {
+  cursor: url('magnifying_glass.png'), pointer !important;
 }
 
 /* Paper/noise texture overlay */
@@ -110,7 +114,7 @@ header p {
   position: relative; z-index: 5;
   overflow-x: auto;
   overflow-y: hidden;
-  cursor: grab;
+  cursor: url('magnifying_glass.png'), pointer;
   user-select: none;
   scrollbar-width: thin;
   scrollbar-color: var(--accent-dark) var(--bg2);
@@ -118,14 +122,10 @@ header p {
 .tl-wrap::-webkit-scrollbar { height: 6px; }
 .tl-wrap::-webkit-scrollbar-track { background: var(--bg2); }
 .tl-wrap::-webkit-scrollbar-thumb { background: var(--accent-dark); border-radius: 3px; }
-.tl-wrap:active { cursor: grabbing; }
 
 .tl-inner { position: relative; }
 
-/* ─── AXIS ───────────────────────────────────────────────── */
-.axis-line { display: none; } /* replaced by seg-line */
-
-/* ─── SEGMENT LINE (čára pro každý rok-segment) ──────────── */
+/* ─── SEGMENT LINE ──────────────────────────────────────── */
 .seg-line {
   position: absolute;
   height: 2px;
@@ -135,7 +135,7 @@ header p {
   z-index: 2;
 }
 
-/* ─── GAP LINE (spojovací čára mezi roky) ────────────────── */
+/* ─── GAP LINE ──────────────────────────────────────────── */
 .gap-line {
   position: absolute;
   height: 1px;
@@ -145,15 +145,12 @@ header p {
   z-index: 2;
 }
 
-/* ─── YEAR MARKERS ───────────────────────────────────────── */
+/* ─── YEAR MARKERS ──────────────────────────────────────── */
 .yr {
   position: absolute;
   display: flex; flex-direction: column; align-items: center;
   transform: translateX(-50%);
   z-index: 6;
-}
-.yr-tick {
-  display: none; /* tick skryt — label je přímo na ose */
 }
 .yr-label {
   font-family: 'Playfair Display', serif;
@@ -162,22 +159,20 @@ header p {
   letter-spacing: 0.08em;
   color: var(--accent);
   white-space: nowrap;
-  /* vertikálně vystředit na osu */
   transform: translateY(-50%);
   background: var(--bg);
   padding: 0 5px;
   line-height: 1;
 }
 
-/* ─── EVENT ELEMENTS ─────────────────────────────────────── */
+/* ─── EVENT ELEMENTS ────────────────────────────────────── */
 .ev {
   position: absolute;
   z-index: 4;
-  cursor: pointer;
+  cursor: url('magnifying_glass.png'), pointer;
   transform: translateX(-50%);
 }
 
-/* connector line */
 .ev-line {
   position: absolute;
   width: 1px;
@@ -192,7 +187,6 @@ header p {
   background: linear-gradient(0deg, var(--bot-color-glow) 0%, var(--bot-color) 100%);
 }
 
-/* dot */
 .ev-dot {
   position: absolute;
   width: 9px; height: 9px; border-radius: 50%;
@@ -221,7 +215,6 @@ header p {
   box-shadow: 0 0 0 1px var(--bot-color-light), 0 0 16px var(--bot-color);
 }
 
-/* angled label */
 .ev-label {
   position: absolute;
   white-space: nowrap;
@@ -240,22 +233,8 @@ header p {
   font-weight: 600;
   font-size: 0.78rem;
 }
-.ev.top .ev-label .ldate  { color: var(--top-color-dark); }
-.ev.top .ev-label .ltitle { color: var(--top-color-light); }
-.ev.top:hover .ev-label .ltitle,
-.ev.top .ev-label:hover .ltitle { text-decoration: underline; color: var(--top-color); }
-.ev.bottom .ev-label .ldate  { color: var(--bot-color-dark); }
-.ev.bottom .ev-label .ltitle { color: var(--bot-color-light); }
-.ev.bottom:hover .ev-label .ltitle,
-.ev.bottom .ev-label:hover .ltitle { text-decoration: underline; color: var(--bot-color); }
 
-a.ev-label-link {
-  text-decoration: none;
-  cursor: pointer;
-}
-a.ev-label-link:hover .ltitle { text-decoration: underline; }
-
-/* ─── TOOLTIP ────────────────────────────────────────────── */
+/* ─── TOOLTIP ───────────────────────────────────────────── */
 .tooltip {
   position: fixed; z-index: 1000;
   background: var(--bg2);
@@ -273,43 +252,13 @@ a.ev-label-link:hover .ltitle { text-decoration: underline; }
 }
 .tooltip.vis { opacity: 1; }
 
-.tooltip.de {
-  border-color: var(--top-color-dark);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 0 1px var(--top-color-glow) inset;
-  background: var(--bg2); 
-}
-.tooltip.cz {
-  border-color: var(--bot-color-dark);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 0 1px var(--bot-color-glow) inset;
-   background: var(--bg3); 
-}
-
-.tt-date {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.07em;
-  margin-bottom: 0.25rem;
-}
-.tooltip.de .tt-date  { color: var(--top-color-dark); }
-.tooltip.cz .tt-date  { color: var(--bot-color-dark); }
-
-.tt-title {
-  font-weight: 600;
-  font-size: 0.94rem;
-  margin-bottom: 0.35rem;
-}
-.tooltip.de .tt-title { color: var(--top-color); }
-.tooltip.cz .tt-title { color: var(--bot-color); }
-
-/* ─── FADE EDGES ─────────────────────────────────────────── */
 .fade-l, .fade-r {
   position: fixed; top: 0; bottom: 0; width: 50px;
   pointer-events: none; z-index: 6;
 }
-.fade-l { left: 0;  background: linear-gradient(90deg,  var(--bg), transparent); }
+.fade-l { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
 .fade-r { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
 
-/* ─── FOOTER ─────────────────────────────────────────────── */
 footer {
   text-align: center;
   padding: 1.2rem;
@@ -319,14 +268,8 @@ footer {
   border-top: 1px solid var(--line);
   position: relative; z-index: 10;
   background: var(--bg2);
+}
 
-.tl-wrap {
-  overflow-x: auto;
-  overflow-y: hidden;
-  position: relative;
-  white-space: nowrap;
-}
-.tl-inner {
-  display: inline-block;
-}
-}
+/* timeline wrapper uvnitř footeru */
+.tl-wrap { overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap; cursor: url('magnifying_glass.png'), pointer; }
+.tl-inner { display: inline-block; }
