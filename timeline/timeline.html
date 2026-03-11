@@ -274,6 +274,32 @@ function render() {
   } else {
     wrap.scrollLeft = 0;
   }
+
+
+if (first_position && first_position.trim()) {
+  const target = parseDate(first_position.trim()).getTime();
+  let best = allPlaced[0];
+  allPlaced.forEach(p => {
+    if (Math.abs(parseDate(p.e.date).getTime()-target) < Math.abs(parseDate(best.e.date).getTime()-target))
+      best = p;
+  });
+  requestAnimationFrame(() => {
+    wrap.scrollLeft = Math.max(0, best.x - wrap.clientWidth / 2);
+  });
+} else {
+  wrap.scrollLeft = 0;
+}
+
+/* centrování pokud je osa užší než viewport */
+if (inner.offsetWidth < wrap.clientWidth) {
+  wrap.style.display = "flex";
+  wrap.style.justifyContent = "center";
+  wrap.scrollLeft = 0;
+} else {
+  wrap.style.display = "";
+  wrap.style.justifyContent = "";
+}
+
 }
 
 const tip      = document.getElementById('tip');
