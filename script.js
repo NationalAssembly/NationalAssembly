@@ -59,13 +59,21 @@ function loadContent() {
   // Notify iframe (may already be loaded)
   notifyTimeline(lang);
 
-  // Build file path
-  const file = `${lang}/${page}`;
-
+  // Build initial file path
+  let file = `${lang}/${page}`;
+  
   fetch(file)
     .then((r) => {
       if (!r.ok) throw new Error("Page not found");
       return r.text();
+    })
+    .catch(() => {
+      // Pokud první fetch selže, zkusíme přidat .html
+      file = `${lang}/${page}.html`;
+      return fetch(file).then(r => {
+        if (!r.ok) throw new Error("Page not found even with .html");
+        return r.text();
+      });
     })
     .then((html) => {
       const c = document.getElementById("content");
