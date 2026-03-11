@@ -329,23 +329,26 @@ function moveTip(ev) {
 }
 function hideTip() { tip.classList.remove('vis'); }
 
+// --- centrování horizontálně ---
 const wrap = document.getElementById('tlWrap');
-let drag = false, sx, sl;
-wrap.addEventListener('mousedown', e => {
-  drag = true; sx = e.pageX - wrap.offsetLeft; sl = wrap.scrollLeft;
-  wrap.style.cursor = 'grabbing';
-});
-document.addEventListener('mouseup', () => { drag = false; wrap.style.cursor = 'grab'; });
-wrap.addEventListener('mousemove', e => {
-  if (!drag) return;
-  e.preventDefault();
-  wrap.scrollLeft = sl - (e.pageX - wrap.offsetLeft - sx);
-});
-wrap.addEventListener('wheel', e => {
-  e.preventDefault();
-  wrap.scrollLeft += e.deltaY !== 0 ? e.deltaY : e.deltaX;
-}, { passive: false });
+const inner = document.getElementById('tlInner');
 
+if (inner.offsetWidth < wrap.clientWidth) {
+  // obsah je menší než viewport → centrovat přes scrollLeft
+  wrap.scrollLeft = (inner.offsetWidth - wrap.clientWidth) / -2 + wrap.clientWidth / 2;
+} else if (first_position && first_position.trim()) {
+  const target = parseDate(first_position.trim()).getTime();
+  let best = allPlaced[0];
+  allPlaced.forEach(p => {
+    if (Math.abs(parseDate(p.e.date).getTime() - target) < Math.abs(parseDate(best.e.date).getTime() - target))
+      best = p;
+  });
+  requestAnimationFrame(() => {
+    wrap.scrollLeft = Math.max(0, best.x - wrap.clientWidth / 2);
+  });
+} else {
+  wrap.scrollLeft = 0;
+}
 render();
 
 window.addEventListener('message', function(event) {
