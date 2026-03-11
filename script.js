@@ -1,39 +1,27 @@
-document.addEventListener("DOMContentLoaded", () => {
-  loadContent();
-  setupNavigation();
-  setYear();
+// script.js
+
+let uiTranslations = {};
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadTranslations();   // Načte JSON s překlady
+  loadContent();              // Načte hlavní obsah
+  setupNavigation();          // Nastaví menu, dropdowny a hamburger
+  setYear();                  // Aktuální rok
 });
 
-const uiTranslations = {
-  en: {
-    germany: "GERMANY",
-    czechoslovakia: "CZECHOSLOVAKIA",
-    na: "National Assembly",
-    weimar: "Weimar Republic",
-    first_rep: "First Republic",
-    code: "Code",
-    content: "Content"
-  },
-  cz: {
-    germany: "NĚMECKO",
-    czechoslovakia: "ČESKOSLOVENSKO",
-    na: "Národní shromáždění",
-    weimar: "Výmarská republika",
-    first_rep: "První republika",
-    code: "Kód",
-    content: "Obsah"
-  },
-  de: {
-    germany: "DEUTSCHLAND",
-    czechoslovakia: "TSCHECHOSLOWAKEI",
-    na: "Nationalversammlung",
-    weimar: "Weimarer Republik",
-    first_rep: "Erste Republik",
-    code: "Code",
-    content: "Inhalt"
+// --- Načtení překladů ---
+async function loadTranslations() {
+  try {
+    const res = await fetch("translations.json");
+    if (!res.ok) throw new Error("Translations file not found");
+    uiTranslations = await res.json();
+  } catch (e) {
+    console.error("Error loading translations:", e);
+    uiTranslations = {};
   }
-};
+}
 
+// --- Získání aktuálního jazyka ---
 function getCurrentLang() {
   const params = new URLSearchParams(window.location.search);
   let lang = params.get("lang");
@@ -44,46 +32,44 @@ function getCurrentLang() {
   return lang;
 }
 
+// --- Načtení obsahu stránky ---
 function loadContent() {
   const params = new URLSearchParams(window.location.search);
   const lang = getCurrentLang();
   const page = params.get("page") || "home";
 
-  // Update language button text
+  // Aktualizace tlačítka pro jazyk
   const langBtn = document.getElementById("currentLangBtn");
   if (langBtn) langBtn.textContent = lang.toUpperCase();
 
-  // Apply static UI translations
+  // Použije překlady
   applyTranslations(lang);
 
-  // Notify iframe (may already be loaded)
+  // Oznámení iframe časové osy
   notifyTimeline(lang);
 
-  // Build initial file path
+  // Snažíme se načíst soubor (fallback s .html)
   let file = `${lang}/${page}`;
-  
   fetch(file)
-    .then((r) => {
+    .then(r => {
       if (!r.ok) throw new Error("Page not found");
       return r.text();
     })
-    .catch(() => {
-      // Pokud první fetch selže, zkusíme přidat .html
-      file = `${lang}/${page}.html`;
-      return fetch(file).then(r => {
-        if (!r.ok) throw new Error("Page not found even with .html");
-        return r.text();
-      });
-    })
-    .then((html) => {
+    .catch(() => fetch(`${file}.html`).then(r => {
+      if (!r.ok) throw new Error("Page not found even with .html");
+      return r.text();
+    }))
+    .then(html => {
       const c = document.getElementById("content");
       if (c) c.innerHTML = html;
     })
     .catch(() => {
-      document.getElementById("content").innerHTML = "<h1>404 - Content not found</h1>";
+      const c = document.getElementById("content");
+      if (c) c.innerHTML = "<h1>404 - Content not found</h1>";
     });
 }
 
+// --- Aplikace překladů na elementy ---
 function applyTranslations(lang) {
   const elements = document.querySelectorAll('[data-i18n]');
   elements.forEach(el => {
@@ -94,11 +80,11 @@ function applyTranslations(lang) {
   });
 }
 
+// --- Oznámení iframe o jazyku ---
 function notifyTimeline(lang) {
   const frame = document.getElementById('timelineFrame');
   if (!frame) return;
 
-  // Iframe může ještě načítat — pošleme zprávu po onload i hned
   const msg = { type: 'setLanguage', lang: lang.toUpperCase() };
   try { frame.contentWindow.postMessage(msg, '*'); } catch(e) {}
   frame.addEventListener('load', function onLoad() {
@@ -107,23 +93,26 @@ function notifyTimeline(lang) {
   });
 }
 
+// --- Navigace ---
 function navigateTo(page) {
   const lang = getCurrentLang();
   window.location.search = `?lang=${lang}&page=${page}`;
 }
 
+// --- Přepínání jazyka ---
 function switchLanguage(newLang) {
   const params = new URLSearchParams(window.location.search);
   const page = params.get("page") || "home";
-  // Změna URL přenačte stránku — loadContent() pak zavolá notifyTimeline()
   window.location.search = `?lang=${newLang}&page=${page}`;
 }
 
+// --- Nastavení aktuálního roku ve footeru ---
 function setYear() {
   const yearSpan = document.getElementById("currentYear");
   if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 }
 
+// --- Nastavení navigace a dropdownů ---
 function setupNavigation() {
   const hamburger = document.getElementById("hamburgerBtn");
   const nav = document.getElementById("mainNav");
@@ -131,9 +120,7 @@ function setupNavigation() {
   const isMobile = window.innerWidth <= 768;
 
   if (hamburger) {
-    hamburger.addEventListener("click", () => {
-      nav.classList.toggle("active");
-    });
+    hamburger.addEventListener("click", () => nav.classList.toggle("active"));
   }
 
   dropdowns.forEach(btn => {
@@ -145,17 +132,13 @@ function setupNavigation() {
       button.classList.add("active");
     }
 
-    button.addEventListener("click", (e) => {
+    button.addEventListener("click", e => {
       e.stopPropagation();
       const isOpen = content.classList.contains("show");
 
       if (!isMobile) {
-        document.querySelectorAll(".dropdown-content").forEach(c => {
-          if (c !== content) c.classList.remove("show");
-        });
-        document.querySelectorAll(".dropbtn").forEach(b => {
-          if (b !== button) b.classList.remove("active");
-        });
+        document.querySelectorAll(".dropdown-content").forEach(c => { if (c !== content) c.classList.remove("show"); });
+        document.querySelectorAll(".dropbtn").forEach(b => { if (b !== button) b.classList.remove("active"); });
       }
 
       content.classList.toggle("show");
@@ -163,18 +146,19 @@ function setupNavigation() {
     });
   });
 
-  window.addEventListener("click", (e) => {
+  window.addEventListener("click", e => {
     if (!e.target.closest('.dropdown')) {
       document.querySelectorAll(".dropdown-content").forEach(c => c.classList.remove("show"));
+      document.querySelectorAll(".dropbtn").forEach(b => b.classList.remove("active"));
     }
   });
 
-  window.addEventListener("message", function(event) {
-  if (!event.data) return;
-
-  if (event.data.type === "navigate") {
-    navigateTo(event.data.page);
-  }
-});
-
+  window.addEventListener("message", event => {
+    if (!event.data) return;
+    if (event.data.type === "navigate") navigateTo(event.data.page);
+  });
 }
+
+// --- Globální zpřístupnění pro onclick v HTML ---
+window.navigateTo = navigateTo;
+window.switchLanguage = switchLanguage;
