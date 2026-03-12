@@ -1,11 +1,11 @@
-# Freedom project – website
+# CEIFT – website
 
 ## English:
 ### Web structure:
 - `index.html` – main page
+    - Freedom timeline
     - what the website is about
     - German podcast
-    - Czech podcast
     - why they were created, about Freedom project, who we are
 - Germany
     - about National Assembly
@@ -26,9 +26,9 @@
 ## Česky:
 ### Struktura webu:
 - `index.html` – hlavní stránka
+    - časová osa svobody
     - co to je za web
     - podcast německý
-    - podcast český
     - proč vznikly, o Freedom projektu, kdo jsme
 - Německo
     - o National Assembly
@@ -49,9 +49,9 @@
 ## Deutsch:
 ### Webstruktur:
 - `index.html` – Hauptseite
+    - Freiheitszeitleiste 
     - worum es auf der Website geht
     - deutscher Podcast
-    - tschechischer Podcast
     - warum sie entstanden sind, über das Freedom-Projekt, wer wir sind
 - Deutschland
     - über die Nationalversammlung

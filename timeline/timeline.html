@@ -110,28 +110,27 @@ function render() {
   const allPlaced = [];
   const segmentStarts = {};
 
-years.forEach(y => {
-  const evts = byYear[y];
-  const uniqueDates = [...new Set(evts.map(e => e.date))].sort();
-  const n = uniqueDates.length;
+  years.forEach(y => {
+    const evts = byYear[y];
+    const uniqueDates = [...new Set(evts.map(e => e.date))].sort();
+    const n = uniqueDates.length;
 
-  const segLineStart = cursor + YEAR_W;
-  segmentStarts[y] = segLineStart;
-  const segLineLen  = (n + 1.2) * EV_SPACING;
+    const segLineStart = cursor + YEAR_W;
+    segmentStarts[y] = segLineStart;
+    const segLineLen  = (n + 1.2) * EV_SPACING;
 
-  uniqueDates.forEach((date, i) => {
-    const sameDay = evts.filter(e => e.date === date);
-    const count = sameDay.length;
-    sameDay.forEach((e, j) => {
-      // Rozesadit kolem středu: -0.5, +0.5 pro 2 události; -1, 0, +1 pro 3 atd.
-      const offset = (j - (count - 1) / 2) * EV_SPACING;
-      const x = segLineStart + (i + 1) * EV_SPACING + offset;
-      allPlaced.push({ e, x, year: y });
+    uniqueDates.forEach((date, i) => {
+      const sameDay = evts.filter(e => e.date === date);
+      const count = sameDay.length;
+      sameDay.forEach((e, j) => {
+        const offset = (j - (count - 1) / 2) * EV_SPACING;
+        const x = segLineStart + (i + 1) * EV_SPACING + offset;
+        allPlaced.push({ e, x, year: y });
+      });
     });
-  });
 
-  cursor += YEAR_W + segLineLen;
-});
+    cursor += YEAR_W + segLineLen;
+  });
 
   const totalW = cursor + 20;
 
@@ -140,9 +139,7 @@ years.forEach(y => {
     return evts.map(item => {
       const t = item.e.title;
       const mid = Math.floor(t.length / 2);
-      const longerHalf = t.length > 16
-        ? Math.max(mid, t.length - mid)
-        : t.length;
+      const longerHalf = t.length > 16 ? Math.max(mid, t.length - mid) : t.length;
       const effLen = Math.max(longerHalf, fmtDate(item.e.date).length);
       const hReach = item.x + effLen * CHAR_PX * Math.cos(RAD) + 16;
       let lv = 0;
@@ -202,6 +199,22 @@ years.forEach(y => {
     lineEl.style.cssText = `left:${segStart}px; top:${axisY}px; width:${segEnd - segStart}px;`;
     inner.appendChild(lineEl);
   });
+
+  // ── WW2 zakončení — až tady, kdy axisY a segEnds existují ──
+  const lastYear = years[years.length - 1];
+  const lastSegEnd = segEnds[lastYear];
+
+  const ww2El = document.createElement('div');
+  ww2El.className = 'yr ww2-marker';
+  ww2El.style.left = lastSegEnd + 'px';
+  ww2El.style.top  = axisY + 'px';
+  ww2El.innerHTML  = `<span class="yr-label ww2-label">WW2</span>`;
+  inner.appendChild(ww2El);
+
+  const endArrow = document.createElement('div');
+  endArrow.className = 'axis-end';
+  endArrow.style.cssText = `left:${lastSegEnd}px; top:${axisY}px;`;
+  inner.appendChild(endArrow);
 
   function placeEv(item) {
     const { e, x, lv } = item;
@@ -277,7 +290,6 @@ years.forEach(y => {
   topItems.forEach(placeEv);
   botItems.forEach(placeEv);
 
-  /* centrování pokud je osa užší než viewport */
   const wrap = document.getElementById('tlWrap');
   requestAnimationFrame(() => {
     if (inner.offsetWidth < wrap.clientWidth) {
@@ -300,8 +312,7 @@ years.forEach(y => {
       }
     }
   });
-    window.parent.postMessage({ type: 'timelineHeight', height: totalH, axisY: axisY }, '*');
-
+  window.parent.postMessage({ type: 'timelineHeight', height: totalH, axisY: axisY }, '*');
 }
 
 const tip     = document.getElementById('tip');

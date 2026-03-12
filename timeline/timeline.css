@@ -269,3 +269,23 @@ footer {
 /* timeline wrapper uvnitř footeru */
 .tl-wrap { overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap; cursor: url('magnifying_glass.png'), pointer; }
 .tl-inner { display: inline-block; }
+
+/* ─── WW2 ZAKONČENÍ ─────────────────────────────────────── */
+.ww2-label {
+  color: #b87004;
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 8px #b87004;
+  white-space: nowrap;
+}
+
+.axis-end {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 10px solid var(--accent);
+  transform: translate(0, -50%);
+  z-index: 6;
+}
