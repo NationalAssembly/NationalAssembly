@@ -57,11 +57,11 @@ const data = [
   {
     "date": "1918-11-14",
     "country": "CZ",
-    "CZtitle": "Vznik Rev. nár. shromáž.",
+    "CZtitle": "Rev. národní shromáždění",
     "CZdescription": "14. listopad 1918 – vznik Revolučního národního shromáždění, Masaryk prezidentem",
-    "ENtitle": "Revolutionary National Assembly",
+    "ENtitle": "Rev. National Assembly",
     "ENdescription": "November 14, 1918 – establishment of the Revolutionary National Assembly, Masaryk as president",
-    "DEtitle": "Revolutionäre Nationalversammlung",
+    "DEtitle": "Rev. Nationalversammlung",
     "DEdescription": "14. November 1918 – Gründung der Revolutionären Nationalversammlung, Masaryk zum Präsidenten",
     "url": "revolutionary-national-assembly"
   },
@@ -79,11 +79,11 @@ const data = [
   {
     "date": "1919-06-15",
     "country": "CZ",
-    "CZtitle": "Komunální volby (ženy)",
+    "CZtitle": "Komunální volby",
     "CZdescription": "15. června 1919 – komunální volby, ženy mohou poprvé volit a být voleny",
-    "ENtitle": "Local Elections (Women)",
+    "ENtitle": "Local Elections",
     "ENdescription": "June 15, 1919 – local elections, women can vote and be elected for the first time",
-    "DEtitle": "Kommunalwahlen (Frauen)",
+    "DEtitle": "Kommunalwahlen",
     "DEdescription": "15. Juni 1919 – Kommunalwahlen, Frauen dürfen zum ersten Mal wählen und gewählt werden",
     "url": "local-elections-women"
   },
@@ -138,7 +138,7 @@ const data = [
     "CZdescription": "27. května 1920 – konec činnosti Revolučního národního shromáždění",
     "ENtitle": "End of Rev. National Assembly",
     "ENdescription": "May 27, 1920 – termination of the activities of the Revolutionary National Assembly",
-    "DEtitle": "Ende der Rev. Nationalversammlung",
+    "DEtitle": "Rev. Nationalversammlung Ende",
     "DEdescription": "27. Mai 1920 – Ende der Tätigkeit der Revolutionären Nationalversammlung",
     "url": "end-of-rev-national-assembly"
   },
@@ -257,13 +257,13 @@ const data = [
   {
     "date": "1919-01-05",
     "country": "DE",
-    "CZtitle": "Potlačení Spartakovců",
+    "CZtitle": "Povstání spartakovců",
     "CZdescription": "5. - 15. ledna 1919 – potlačení Spartakovského povstání, zavraždění Karla Liebknechta a Rosy Luxemburgové",
-    "ENtitle": "Suppression of the Spartacists",
+    "ENtitle": "Spartacist Uprising",
     "ENdescription": "January 5–15, 1919 – suppression of the Spartacist uprising, assassination of Karl Liebknecht and Rosa Luxemburg",
-    "DEtitle": "Niederschlagung des Spartakusaufstands",
+    "DEtitle": "Spartakusaufstand",
     "DEdescription": "5.–15. Januar 1919 – Niederschlagung des Spartakusaufstands, Ermordung von Karl Liebknecht und Rosa Luxemburg",
-    "url": "suppression-of-the-spartacists"
+    "url": "spartacist-uprising"
   },
   {
     "date": "1919-01-19",
@@ -343,13 +343,13 @@ const data = [
     "url": "enabling-act"
   },
   {
-    "date": "1933-02-28",
+    "date": "1933-02-29",
     "country": "DE",
     "CZtitle": "Zákaz odborů a opozice",
     "CZdescription": "28. února – 14. července 1933 – zákaz odborů a opozičních stran",
     "ENtitle": "Ban on Unions and Opposition",
     "ENdescription": "February 28 – July 14, 1933 – ban on trade unions and opposition parties",
-    "DEtitle": "Verbot von Gewerkschaften und Opposition",
+    "DEtitle": "Gewerksch. und Opposit. Verbot",
     "DEdescription": "28. Februar – 14. Juli 1933 – Verbot von Gewerkschaften und Oppositionsparteien",
     "url": "ban-on-unions-and-opposition"
   },

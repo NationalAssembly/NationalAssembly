@@ -34,16 +34,14 @@
 
 <script>
 let language = "CZ";
-const first_position = "";
 
-const EV_SPACING = 50; //
+const EV_SPACING = 50;
 const SEG_PAD_L  = 50;
 const SEG_PAD_R  = 50;
-const YEAR_W     = 0;//
-const ANGLE      = 42;//
-const CONN_BASE  = 32;//
-const CONN_BASE_TOP = 55;//
-const CONN_STEP  = 22;
+const ANGLE      = 42;
+const CONN_BASE  = 32;      // Base connector height for bottom (CZ) events
+const CONN_BASE_TOP = 55;   // Base connector height for top (DE) events
+const CONN_STEP  = 22;      // Height step per level
 const CHAR_PX    = 7.5;  // reálná šířka znaku v px
 const RAD        = ANGLE * Math.PI / 180;
 
@@ -115,7 +113,7 @@ function render() {
     const uniqueDates = [...new Set(evts.map(e => e.date))].sort();
     const n = uniqueDates.length;
 
-    const segLineStart = cursor + YEAR_W;
+    const segLineStart = cursor;
     segmentStarts[y] = segLineStart;
     const segLineLen  = (n + 1.2) * EV_SPACING;
 
@@ -129,7 +127,7 @@ function render() {
       });
     });
 
-    cursor += YEAR_W + segLineLen;
+    cursor += segLineLen;
   });
 
   const totalW = cursor + 20;
@@ -178,7 +176,7 @@ function render() {
     if (yi > 0) {
       const prevEnd  = segEnds[years[yi - 1]];
       const gapStart = prevEnd;
-      const gapEnd   = segStart - YEAR_W;
+      const gapEnd   = segStart;
       if (gapEnd > gapStart) {
         const gapLine = document.createElement('div');
         gapLine.className = 'gap-line';
@@ -189,7 +187,7 @@ function render() {
 
     const yrEl = document.createElement('div');
     yrEl.className = 'yr';
-    yrEl.style.left = (segStart - YEAR_W) + 'px';
+    yrEl.style.left = segStart + 'px';
     yrEl.style.top  = axisY + 'px';
     yrEl.innerHTML  = `<span class="yr-label">${y}</span>`;
     inner.appendChild(yrEl);
@@ -208,7 +206,7 @@ function render() {
   ww2El.className = 'yr ww2-marker';
   ww2El.style.left = lastSegEnd + 'px';
   ww2El.style.top  = axisY + 'px';
-  ww2El.innerHTML  = `<span class="yr-label ww2-label">WW2</span>`;
+  ww2El.innerHTML  = `<span class="yr-label ww2-label">WWII</span>`;
   inner.appendChild(ww2El);
 
   const endArrow = document.createElement('div');
@@ -299,17 +297,7 @@ function render() {
     } else {
       wrap.style.display = "";
       wrap.style.justifyContent = "";
-      if (first_position && first_position.trim()) {
-        const target = parseDate(first_position.trim()).getTime();
-        let best = allPlaced[0];
-        allPlaced.forEach(p => {
-          if (Math.abs(parseDate(p.e.date).getTime()-target) < Math.abs(parseDate(best.e.date).getTime()-target))
-            best = p;
-        });
-        wrap.scrollLeft = Math.max(0, best.x - wrap.clientWidth / 2);
-      } else {
-        wrap.scrollLeft = 0;
-      }
+      wrap.scrollLeft = 0;
     }
   });
   window.parent.postMessage({ type: 'timelineHeight', height: totalH, axisY: axisY }, '*');
