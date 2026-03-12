@@ -97,9 +97,21 @@ header {
 .logo {
     font-family: 'Anton', 'Arial Black', sans-serif;
     font-size: 2.1rem;
-
     color: white;
     user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.logo img {
+        border: none;
+
+    height: 44px;
+    width: auto;
+    display: block;
+    /* Aby obrázek ladil s oranžovým textem — filtr přebarvuje na stejný tón */
 }
 
 /* Navigace a Dropdowny */
