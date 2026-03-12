@@ -107,10 +107,14 @@ body::before {
   background: linear-gradient(180deg, var(--accent-glow) 0%, var(--accent) 100%);
 }
 
+.bottom .ev-line {
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-glow) 100%);
+}
+
 .ev-dot {
   position: absolute;
   width: 9px; height: 9px; border-radius: 50%;
-  left: 50%; transform: translateX(-50%);
+  left: 50%; transform: translate(-50%, -50%);
   border: 2px solid var(--bg);
   transition: transform 0.2s, box-shadow 0.2s;
   z-index: 5;
@@ -120,7 +124,7 @@ body::before {
 .ev:hover .ev-dot,
 .ev .ev-label:hover ~ .ev-dot,
 .ev:has(.ev-label:hover) .ev-dot {
-  transform: translateX(-50%) scale(1.7);
+  transform: translate(-50%, -50%) scale(1.7);
   box-shadow: 0 0 0 1px var(--accent-light), 0 0 16px var(--accent);
 }
 
