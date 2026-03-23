@@ -1,40 +1,16 @@
 /* timeline.css — oranžová paleta kolem #ec9706 */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:wght@300;400;600&display=swap');
 
 :root {
   /* ── Oranžová paleta ── */
   --accent:       #ec9706;
-  --accent-light: #f5bc48;
-  --accent-dark:  #b87004;
-  --accent-deep:  #7a4500;
-  --accent-glow:  rgba(236, 151, 6, 0.25);
-
-  /* ── Barvy horní poloviny (DE) ── */
-  --top-color:       #ec9706;
-  --top-color-light: #f5bc48;
-  --top-color-dark:  #b87004;
-  --top-color-glow:  rgba(236, 151, 6, 0.25);
-
-  /* ── Barvy dolní poloviny (CZ) ── */
-  --bot-color:       #ec9706;
-  --bot-color-light: #f5bc48;
-  --bot-color-dark:  #b87004;
-  --bot-color-glow:  rgba(236, 151, 6, 0.25);
 
   /* ── Pozadí ── */
   --bg:           #000000;
-  --bg2:          #000000;
-  --bg3:          #6182c0;
 
   /* ── Text ── */
-  --text:         #f5e8cc;
-  --text-mid:     #ffffff;
-  --text-faint:   #ffffff;
-
-  /* ── Osa & linie ── */
-  --axis:         #ec9706;
-  --line:         #5a3e00;
+  --text:         #ffffff;
 }
 
 /* ─── RESET ─────────────────────────────────────────────── */
@@ -42,9 +18,8 @@
 
 body {
   background-color: #000000; /* Tmavé pozadí obsahu */
-  font-family: 'Crimson Pro', serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
-
 }
 body {
   cursor: url('magnifying_glass.png') 20 22, pointer;
@@ -58,55 +33,6 @@ body::before {
   z-index: 0;
 }
 
-/* ─── HEADER ─────────────────────────────────────────────── */
-header {
-  position: relative; z-index: 10;
-  text-align: center;
-  padding: 2.4rem 2rem 1.6rem;
-  border-bottom: 1px solid var(--line);
-  background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
-}
-
-header::before {
-  content: '';
-  display: block;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--accent-dark), var(--accent), var(--accent-light), var(--accent), var(--accent-dark), transparent);
-  margin-bottom: 2rem;
-}
-
-header h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.3rem, 3.2vw, 2.4rem);
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  color: var(--text);
-  margin-bottom: 0.3rem;
-}
-
-header h1 .accent { color: var(--accent); }
-
-header p {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  color: var(--text-mid);
-  font-size: 0.9rem;
-  letter-spacing: 0.05em;
-}
-
-/* ─── SCROLL HINT ────────────────────────────────────────── */
-.scroll-hint {
-  position: relative; z-index: 10;
-  text-align: center;
-  padding: 0.4rem;
-  font-size: 0.76rem;
-  color: var(--text-faint);
-  font-style: italic;
-  letter-spacing: 0.07em;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--line);
-}
-
 /* ─── TIMELINE WRAPPER ───────────────────────────────────── */
 .tl-wrap {
   position: relative; z-index: 5;
@@ -114,11 +40,11 @@ header p {
   overflow-y: hidden;
   user-select: none;
   scrollbar-width: thin;
-  scrollbar-color: var(--accent-dark) var(--bg2);
+  scrollbar-color: var(--accent) var(--bg);
 }
 .tl-wrap::-webkit-scrollbar { height: 6px; }
-.tl-wrap::-webkit-scrollbar-track { background: var(--bg2); }
-.tl-wrap::-webkit-scrollbar-thumb { background: var(--accent-dark); border-radius: 3px; }
+.tl-wrap::-webkit-scrollbar-track { background: var(--bg); }
+.tl-wrap::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
 
 .tl-inner { position: relative; }
 
@@ -126,8 +52,7 @@ header p {
 .seg-line {
   position: absolute;
   height: 2px;
-  background: linear-gradient(90deg, var(--accent-dark), var(--accent) 30%, var(--accent) 70%, var(--accent-dark));
-  box-shadow: 0 0 6px var(--accent-glow);
+  background: linear-gradient(90deg, var(--accent), var(--accent) 30%, var(--accent) 70%, var(--accent));
   transform: translateY(-50%);
   z-index: 2;
 }
@@ -136,7 +61,7 @@ header p {
 .gap-line {
   position: absolute;
   height: 1px;
-  background: linear-gradient(90deg, var(--accent-dark) 0%, var(--accent-dark) 100%);
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 100%);
   opacity: 0.45;
   transform: translateY(-50%);
   z-index: 2;
@@ -150,9 +75,9 @@ header p {
   z-index: 6;
 }
 .yr-label {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Anton', 'Arial Black', sans-serif;
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.08em;
   color: var(--accent);
   white-space: nowrap;
@@ -175,40 +100,28 @@ header p {
   left: 50%;
   transform: translateX(-50%);
   transition: opacity 0.2s;
+  background: linear-gradient(180deg, transparent 0%, var(--accent) 100%);
 }
-.ev.top .ev-line {
-  background: linear-gradient(180deg, var(--top-color-glow) 0%, var(--top-color) 100%);
-}
-.ev.bottom .ev-line {
-  background: linear-gradient(0deg, var(--bot-color-glow) 0%, var(--bot-color) 100%);
+
+.bottom .ev-line {
+  background: linear-gradient(180deg, var(--accent) 0%, transparent 100%);
 }
 
 .ev-dot {
   position: absolute;
   width: 9px; height: 9px; border-radius: 50%;
-  left: 50%; transform: translateX(-50%);
+  left: 50%; transform: translate(-50%, -50%);
   border: 2px solid var(--bg);
   transition: transform 0.2s, box-shadow 0.2s;
   z-index: 5;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
 }
-.ev.top .ev-dot {
-  background: var(--top-color);
-  box-shadow: 0 0 0 1px var(--top-color), 0 0 10px var(--top-color-glow);
-}
-.ev.bottom .ev-dot {
-  background: var(--bot-color);
-  box-shadow: 0 0 0 1px var(--bot-color), 0 0 10px var(--bot-color-glow);
-}
-.ev.top:hover .ev-dot,
-.ev.top .ev-label:hover ~ .ev-dot,
-.ev.top:has(.ev-label:hover) .ev-dot {
-  transform: translateX(-50%) scale(1.7);
-  box-shadow: 0 0 0 1px var(--top-color-light), 0 0 16px var(--top-color);
-}
-.ev.bottom:hover .ev-dot,
-.ev.bottom:has(.ev-label:hover) .ev-dot {
-  transform: translateX(-50%) scale(1.7);
-  box-shadow: 0 0 0 1px var(--bot-color-light), 0 0 16px var(--bot-color);
+.ev:hover .ev-dot,
+.ev .ev-label:hover ~ .ev-dot,
+.ev:has(.ev-label:hover) .ev-dot {
+  transform: translate(-50%, -50%) scale(1.7);
+  box-shadow: 0 0 0 1px var(--accent);
 }
 
 .ev-label {
@@ -216,26 +129,19 @@ header p {
   white-space: nowrap;
   display: flex; flex-direction: column; gap: 2px;
   pointer-events: auto;
-  color: var(--text-mid);
+  color: var(--text);
 }
-.ev-label .ldate {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.6rem;
-  letter-spacing: 0.08em;
-  opacity: 0.85;
-}
-.ev-label .ltitle {
-  font-family: 'Crimson Pro', serif;
-  font-weight: 600;
-  font-size: 0.78rem;
+
+.ev-label-link {
+  text-decoration: none;
 }
 
 /* ─── TOOLTIP ───────────────────────────────────────────── */
 .tooltip {
   position: fixed; z-index: 1000;
-  background: var(--bg2);
-  border: 1px solid var(--accent-dark);
-  border-radius: 3px;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  border-radius: 0;
   padding: 0.85rem 1rem;
   max-width: 270px;
   pointer-events: none;
@@ -243,7 +149,7 @@ header p {
   transition: opacity 0.12s;
   font-size: 0.88rem;
   line-height: 1.5;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 0 1px var(--accent-glow) inset;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.6);
   color: var(--text);
 }
 .tooltip.vis { opacity: 1; }
@@ -251,46 +157,10 @@ header p {
 .fade-l, .fade-r {
   position: fixed; top: 0; bottom: 0; width: 50px;
   pointer-events: none; z-index: 6;
+  display: none;
 }
 .fade-l { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
 .fade-r { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
 
-footer {
-  text-align: center;
-  padding: 1.2rem;
-  font-size: 0.76rem;
-  color: var(--text-faint);
-  font-style: italic;
-  border-top: 1px solid var(--line);
-  position: relative; z-index: 10;
-  background: var(--bg2);
-}
-
-/* timeline wrapper uvnitř footeru */
 .tl-wrap { overflow-x: auto; overflow-y: hidden; position: relative; white-space: nowrap; cursor: url('magnifying_glass.png'), pointer; }
-.tl-inner { display: inline-block; }
-
-/* ─── WW2 ZAKONČENÍ ─────────────────────────────────────── */
-.ww2-label {
-  color: #b87004;
-  font-size: 1.1rem;
-  letter-spacing: 0.12em;
-  text-shadow: 0 0 8px #b87004;
-  white-space: nowrap;
-}
-
-.axis-end {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-left: 10px solid var(--accent);
-  transform: translate(0, -50%);
-  z-index: 6;
-}
-
-.tl-wrap.dragging,
-.tl-wrap.dragging * {
-  cursor: url('LeftAndRight.png') 16 16, ew-resize !important;
-}
+.tl-inner { position: relative; }
