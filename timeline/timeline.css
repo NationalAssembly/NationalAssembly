@@ -46,8 +46,8 @@ body {
   min-height: 100vh;
 
 }
-body, body * {
-  cursor: url('magnifying_glass.png')20 22 , pointer !important;
+body {
+  cursor: url('magnifying_glass.png') 20 22, pointer;
 }
 
 /* Paper/noise texture overlay */
@@ -288,4 +288,9 @@ footer {
   border-left: 10px solid var(--accent);
   transform: translate(0, -50%);
   z-index: 6;
+}
+
+.tl-wrap.dragging,
+.tl-wrap.dragging * {
+  cursor: url('LeftAndRight.png') 16 16, ew-resize !important;
 }

@@ -339,10 +339,17 @@ function hideTip() { tip.classList.remove('vis'); }
 const wrap = document.getElementById('tlWrap');
 let drag = false, sx, sl;
 wrap.addEventListener('mousedown', e => {
-  drag = true; sx = e.pageX - wrap.offsetLeft; sl = wrap.scrollLeft;
-  wrap.style.cursor = 'grabbing';
+  drag = true;
+  sx = e.pageX - wrap.offsetLeft;
+  sl = wrap.scrollLeft;
+
+  wrap.classList.add('dragging');
 });
-document.addEventListener('mouseup', () => { drag = false; wrap.style.cursor = 'grab'; });
+
+document.addEventListener('mouseup', () => {
+  drag = false;
+  wrap.classList.remove('dragging');
+});
 wrap.addEventListener('mousemove', e => {
   if (!drag) return;
   e.preventDefault();
