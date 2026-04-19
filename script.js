@@ -311,11 +311,9 @@ async function loadCursors() {
 
         // Obnov uložený kurzor
         const saved = localStorage.getItem("selectedCursor");
-        const defaultCursor = "Masarik";
+        const defaultCursor = "Tomáš Garrigue Masaryk";
         const toApply = (saved && cursors.includes(saved)) ? saved : defaultCursor;
 
-        const btn = document.getElementById("cursorBtn");
-        if (btn) btn.textContent = toApply;
         if (!saved) localStorage.setItem("selectedCursor", defaultCursor);
 
         // Počkej až se iframe načte, pak teprve nastav kurzory
@@ -333,7 +331,6 @@ async function loadCursors() {
 
 function selectCursor(folderName) {
     document.getElementById("cursorMenu").classList.remove("show");
-    document.getElementById("cursorBtn").textContent = folderName;
     localStorage.setItem("selectedCursor", folderName);
     applyCursor(folderName);
 }
