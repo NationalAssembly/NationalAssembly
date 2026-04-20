@@ -1,70 +1,83 @@
-# CEIFT – website
+# CEIFT – Central Europe Interwar Freedom Timeline
 
-## English:
-### Web structure:
-- `index.html` – main page
-    - Freedom timeline
-    - what the website is about
-    - German podcast
-    - why they were created, about Freedom project, who we are
-- Germany
-    - about National Assembly
-    - about Weimar Republic
-- Czechoslovakia
-    - about the first Republic
-### Details:
-- podcasts are embedded as YouTube videos (because of multilingual subtitles)
-- all texts will be in English, Czech and German, the browser will automatically display the language according to the user's settings, and there will also be an option to change the language manually
-- under Germany and Czechia there will be various thematic articles (the list is not final) supplemented with historical photos and possibly links to other resources
-### Translation:
-- language versions of the website have their own separate folders (en, de, cz)
-- in addition, the names of website elements in the top and bottom bar are translated at the beginning of script.js
-### License:
-- all code (including website design) is published under EUPL 1.2 license
-- all content except photographs and podcasts is published under CC BY SA 4.0 license
+A student-led international project exploring the history of freedom and democratic progress in Central Europe during the interwar period (1907–1920s).
 
-## Česky:
-### Struktura webu:
-- `index.html` – hlavní stránka
-    - časová osa svobody
-    - co to je za web
-    - podcast německý
-    - proč vznikly, o Freedom projektu, kdo jsme
-- Německo
-    - o National Assembly
-    - o Výmarské republice
-- Československo
-    - o první republice
-### Podrobnosti:
-- všechny texty budou v angličtině, češtině a němčině, prohlížeč automaticky zobrazí jazyk podle nastavení uživatele, navíc bude možnost jazyk změnit manuálně
-- podcasty jsou vloženy jako YouTube videa (kvůli vícejazyčným titulkům)
-- pod Německem a Českem budou různé tematické články (seznam není konečný) doplněné o historické fotografie a případně odkazy na další zdroje
-### Překlad:
-- jazykové verze stránky mají každá svou samostatnou složku (en, de, cz)
-- kromě toho jsou názvy prvků webu v horní a spodní liště přeloženy na začátku script.js
-### Licence:
-- veškerý kód (včetně designu webu) je zveřejněn pod licencí EUPL 1.2
-- veškerý obsah vyjma fotografiií a podcastu je zveřejněn pod licencí CC BY SA 4.0
+## About the Project
 
-## Deutsch:
-### Webstruktur:
-- `index.html` – Hauptseite
-    - Freiheitszeitleiste 
-    - worum es auf der Website geht
-    - deutscher Podcast
-    - warum sie entstanden sind, über das Freedom-Projekt, wer wir sind
-- Deutschland
-    - über die Nationalversammlung
-    - über die Weimarer Republik
-- Tschechoslowakei
-    - über die erste Republik
-### Details:
-- alle Texte werden auf Englisch, Tschechisch und Deutsch sein, der Browser zeigt automatisch die Sprache entsprechend den Einstellungen des Benutzers an, zusätzlich gibt es die Möglichkeit, die Sprache manuell zu ändern
-- Podcasts sind als YouTube-Videos eingebettet (wegen mehrsprachiger Untertitel)
-- unter Deutschland und Tschechien werden verschiedene thematische Artikel (die Liste ist nicht endgültig) mit historischen Fotos und möglicherweise Links zu anderen Ressourcen ergänzt
-### Übersetzung:
-- Sprachversionen der Website haben je einen eigenen Ordner (en, de, cz)
-- Darüber hinaus werden die Namen der Website-Elemente in der oberen und unteren Leiste am Anfang von script.js übersetzt
-### Lizenz:
-- der gesamte Code (vollständig mit Webdesign) wird unter der Lizenz EUPL 1.2 veröffentlicht
-- alle Inhalte außer Fotos und Podcasts werden unter der Lizenz CC BY SA 4.0 veröffentlicht
+**CEIFT** is a collaborative initiative between:
+- **Kepler Gymnasium** (Gymnázium Jana Keplera), Prague, Czech Republic
+- **Bürgerwiese Gymnasium**, Dresden, Germany
+
+The website documents key moments of freedom and democratic development in the region, from male suffrage and women's voting rights to land reform and the formation of the Czechoslovak Republic. It serves as both an educational resource and a historical archive for students, teachers, and researchers interested in this pivotal period of European history.
+
+## Website Structure
+
+```
+/en/       – English language versions
+/de/       – German language versions
+/cz/       – Czech language versions
+/timeline/ – Interactive timeline component
+/cursor/   – Custom cursor assets
+```
+
+## Technical Architecture
+
+### Frontend Stack
+- **Vanilla JavaScript** – No external dependencies; handles:
+  - Multi-language support with automatic browser language detection
+  - Dynamic content loading based on URL parameters
+  - Interactive timeline with real-time synchronization via `postMessage` API
+  - Responsive navigation with mobile-optimized dropdowns
+  - Custom cursor selection and application (stored in `localStorage`)
+
+### Key Features
+- **Multilingual Interface** – Automatic language detection with manual override; UI strings in `translations.json`
+- **Interactive Timeline** – Embedded iframe (`/timeline/timeline.html`) communicates with parent window via postMessage for height synchronization and event navigation
+- **Custom Cursors** – Historical figure-themed cursors stored in `/cursor/` folders, selectable via dropdown, applied dynamically with fallback to system cursor
+- **Responsive Design** – Mobile-first approach with hamburger menu for devices ≤ 768px
+- **Zero External Tracking** – No cookies, no analytics; all state stored locally in browser (`localStorage`)
+- **Source Citation** – Automatic parsing of footnotes from content with formatted bibliography
+
+### File Organization
+- **Content pages** – Stored in language-specific directories (`en/`, `de/`, `cz/`) as individual HTML files
+- **Timeline data** – `/timeline/data.js` contains all events with multilingual metadata
+- **Styling** – Unified `style.css` (no framework) for consistent appearance across languages
+- **Configuration** – `cursors.json` lists available custom cursors
+
+## Deployment
+
+- Hosted on **GitHub Pages** – No build process required
+- Static site – All content served directly as HTML/CSS/JavaScript
+- Minimal latency – Leverages CDN provided by GitHub Pages
+
+## Internationalization (i18n)
+
+### Language Support
+- **Automatic Detection** – Browser language preference (fallback: English)
+- **Manual Override** – Language selector in header (URL parameter: `?lang=en|de|cz`)
+- **Content Localization** – Separate HTML files per language and page
+- **UI Translation** – `translations.json` contains all interface strings
+
+Example URL structure:
+```
+/?lang=cz&page=home
+/?lang=en&page=germany_na
+```
+
+## License
+
+- **Code** (HTML, CSS, JavaScript): [EUPL 1.2](https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12)
+- **Content** (text, historical narratives): [CC BY SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+- **Media** (photographs, podcasts): Individual attribution required
+
+## Project Status
+
+⚠️ **Work in Progress** – Many content pages are incomplete or contain placeholder text. The site is under active development; some features may produce errors as content is finalized.
+
+## Contributing
+
+For contributions or inquiries, please refer to the project's GitHub repository.
+
+---
+
+**Last Updated:** April 2026

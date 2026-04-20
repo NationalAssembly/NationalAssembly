@@ -297,7 +297,7 @@ async function loadCursors() {
             button.onclick = () => selectCursor(folderName);
 
             const img = document.createElement("img");
-            img.src = `./Cursor/${folderName}/head.png`;
+            img.src = `./cursor/${folderName}/head.png`;
             img.alt = folderName;
             img.className = "cursor-icon";
 
