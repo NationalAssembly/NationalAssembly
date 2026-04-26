@@ -50,17 +50,68 @@ function loadContent() {
   fetch(file)
     .then(r => { if (!r.ok) throw new Error(); return r.text(); })
     .catch(() => fetch(`${file}.html`).then(r => { if (!r.ok) throw new Error(); return r.text(); }))
-    .then(html => { const c = document.getElementById("content"); if (c) {
-    c.innerHTML = html;
-    parseSourceLinks(c);  // ← přidej tento řádek
-  } })
-    .catch(() => { const c = document.getElementById("content"); if (c) c.innerHTML = "<h1>404 - Content not found</h1>"; });
-    // Po nastavení jazyka a stránky:
-const container = document.querySelector('.timeline-container');
-if (container) {
-  container.classList.toggle('timeline-expanded', page === 'home');
-}
+    .then(html => { 
+      const c = document.getElementById("content"); 
+      const tc = document.getElementById("top-content");
+      if (c) {
+        c.innerHTML = html;
+        
+        if (tc) {
+          tc.innerHTML = "";
+          if (page === "home") {
+            tc.style.display = "block";
+            tc.style.maxWidth = "1000px";
+            tc.style.margin = "40px auto 20px auto";
+            tc.style.padding = "0 20px";
+            c.style.marginTop = "20px";
+            
+            const h2s = c.querySelectorAll("h2");
+            // Najde druhý nadpis H2 ("About the Website") a vše nad ním přesune nahoru
+            const stopNode = h2s.length > 1 ? h2s[1] : null;
+            if (stopNode) {
+              while (c.firstChild && c.firstChild !== stopNode) {
+                tc.appendChild(c.firstChild);
+              }
+            }
+            parseSourceLinks(tc);
+          } else {
+            tc.style.display = "none";
+            c.style.marginTop = "40px";
+          }
+        }
+        
+        parseSourceLinks(c);
+      } 
+    })
+    .catch(() => { 
+      const c = document.getElementById("content"); 
+      const tc = document.getElementById("top-content");
+      if (tc) tc.style.display = "none";
+      if (c) {
+        c.innerHTML = "<h1>404 - Content not found</h1>"; 
+        c.style.marginTop = "40px";
+      }
+    });
 
+  // Po nastavení jazyka a stránky:
+  const container = document.querySelector('.timeline-container');
+  if (container) {
+    const isHome = (page === 'home');
+    container.classList.toggle('timeline-expanded', isHome);
+
+    const frame = document.getElementById('timelineFrame');
+    if (frame) {
+      const setFrameMode = () => {
+        try {
+          if (frame.contentDocument?.body) {
+            frame.contentDocument.body.classList.toggle('home-mode', isHome);
+          }
+        } catch(e) {}
+      };
+      setFrameMode();
+      frame.addEventListener('load', setFrameMode, { once: true });
+    }
+  }
 }
 
 // --- Aplikace překladů ---
@@ -250,7 +301,8 @@ function parseSourceLinks(container) {
     sourcesList.className = 'sources-list';
     const title = document.createElement('div');
     title.className = 'sources-title';
-    title.textContent = 'Zdroje';
+    const lang = getCurrentLang();
+    title.textContent = uiTranslations[lang]?.['sources'] || 'Sources';
     sourcesList.appendChild(title);
     footnotes.forEach(f => {
       const item = document.createElement('div');
@@ -291,13 +343,35 @@ async function loadCursors() {
 
         menu.innerHTML = "";
 
+        // Přidej výchozí systémový kurzor
+        const defaultButton = document.createElement("button");
+        defaultButton.className = "cursor-option";
+        defaultButton.onclick = () => selectCursor("default");
+
+        const defaultIcon = document.createElement("span");
+        defaultIcon.className = "material-symbols-outlined";
+        defaultIcon.textContent = "arrow_selector_tool";
+        defaultIcon.style.width = "32px";
+        defaultIcon.style.height = "32px";
+        defaultIcon.style.display = "inline-flex";
+        defaultIcon.style.alignItems = "center";
+        defaultIcon.style.justifyContent = "center";
+
+        const defaultLabel = document.createElement("span");
+        const lang = getCurrentLang();
+        defaultLabel.textContent = uiTranslations[lang]?.['default'] || 'Default cursor';
+
+        defaultButton.appendChild(defaultIcon);
+        defaultButton.appendChild(defaultLabel);
+        menu.appendChild(defaultButton);
+
         cursors.forEach(folderName => {
             const button = document.createElement("button");
             button.className = "cursor-option";
             button.onclick = () => selectCursor(folderName);
 
             const img = document.createElement("img");
-            img.src = `./Cursor/${folderName}/head.png`;
+            img.src = `./cursor/${folderName}/head.png`;
             img.alt = folderName;
             img.className = "cursor-icon";
 
@@ -312,7 +386,7 @@ async function loadCursors() {
         // Obnov uložený kurzor
         const saved = localStorage.getItem("selectedCursor");
         const defaultCursor = "Tomáš Garrigue Masaryk";
-        const toApply = (saved && cursors.includes(saved)) ? saved : defaultCursor;
+        const toApply = (saved && (saved === "default" || cursors.includes(saved))) ? saved : defaultCursor;
 
         if (!saved) localStorage.setItem("selectedCursor", defaultCursor);
 
@@ -336,9 +410,36 @@ function selectCursor(folderName) {
 }
 
 function applyCursor(folderName) {
+    // Speciální případ: výchozí systémový kurzor
+    if (folderName === "default") {
+        document.body.style.cursor = "auto";
+
+        function applyToFrame() {
+            const frame = document.getElementById("timelineFrame");
+            if (!frame?.contentDocument?.body) return;
+
+            frame.contentDocument.body.style.cursor = "auto";
+
+            const tlWrap = frame.contentDocument.querySelector(".tl-wrap");
+            if (tlWrap) {
+                tlWrap.style.cursor = "pointer";
+            }
+        }
+
+        applyToFrame();
+
+        const frame = document.getElementById("timelineFrame");
+        if (frame) {
+            frame.addEventListener("load", applyToFrame, { once: true });
+        }
+
+        setTimeout(applyToFrame, 500);
+        return;
+    }
+
     const base = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
-    const cursorUrl = `${base}Cursor/${folderName}/cursor.png`;
-    const mgUrl = `${base}Cursor/${folderName}/magnifying_glass.png`;
+    const cursorUrl = `${base}cursor/${folderName}/cursor.png`;
+    const mgUrl = `${base}cursor/${folderName}/magnifying_glass.png`;
 
     // Hlavní kurzor
     document.body.style.cursor = `url('${cursorUrl}') 0 0, auto`;

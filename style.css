@@ -20,12 +20,24 @@ body {
     line-height: 1.6;
 }
 
+/* Zvýraznění textu */
+::selection {
+    background-color: var(--accent-color);
+    color: #000000;
+}
+
+::-moz-selection {
+    background-color: var(--accent-color);
+    color: #000000;
+}
+
 /* Typografie */
 h1, h2, h3 {
     font-family: 'Anton', 'Arial Black', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
     color: #ffffff;
 }
 
@@ -64,6 +76,11 @@ header {
     transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     border-bottom: 2px solid var(--accent-color);
+}
+
+/* Na domovské stránce (kde je rozbaleno) skryjeme oranžový pruh */
+.timeline-container.timeline-expanded {
+    border-bottom: none;
 }
 
 .timeline-container:hover,
@@ -346,21 +363,21 @@ p {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 16px;
-    height: 16px;
-    background-color: var(--accent-color);
-    color: #000;
+    width: auto;
+    height: auto;
+    background-color: transparent;
+    color: var(--accent-color);
     font-size: 0.65rem;
     font-weight: bold;
     text-decoration: none;
     font-family: 'Anton', sans-serif;
     line-height: 1;
     vertical-align: super;
-    transition: background 0.2s;
+    transition: color 0.2s;
 }
 
 .source-link:hover {
-    background-color: #fff;
+    color: #fff;
 }
 
 .sources-list {
@@ -431,6 +448,16 @@ p {
 .cursor-option:hover {
     background-color: var(--accent-color);
     color: black;
+}
+
+.cursor-option .material-symbols-outlined {
+    width: 32px;
+    height: 32px;
+    display: inline-block !important;
+    font-size: 24px;
+    line-height: 32px;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .cursor-icon {
