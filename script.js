@@ -343,27 +343,7 @@ async function loadCursors() {
 
         menu.innerHTML = "";
 
-        // Přidej výchozí systémový kurzor
-        const defaultButton = document.createElement("button");
-        defaultButton.className = "cursor-option";
-        defaultButton.onclick = () => selectCursor("default");
-
-        const defaultIcon = document.createElement("span");
-        defaultIcon.className = "material-symbols-outlined";
-        defaultIcon.textContent = "arrow_selector_tool";
-        defaultIcon.style.width = "32px";
-        defaultIcon.style.height = "32px";
-        defaultIcon.style.display = "inline-flex";
-        defaultIcon.style.alignItems = "center";
-        defaultIcon.style.justifyContent = "center";
-
-        const defaultLabel = document.createElement("span");
-        const lang = getCurrentLang();
-        defaultLabel.textContent = uiTranslations[lang]?.['default'] || 'Default cursor';
-
-        defaultButton.appendChild(defaultIcon);
-        defaultButton.appendChild(defaultLabel);
-        menu.appendChild(defaultButton);
+       
 
         cursors.forEach(folderName => {
             const button = document.createElement("button");
