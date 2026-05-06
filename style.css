@@ -214,6 +214,46 @@ img, #content iframe {
     border-radius: 0; /* Žádné zaoblené rohy */
 }
 
+/* Partner Logos Section */
+.partner-logos-section {
+    background-color: #000000;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.interreg-logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.interreg-logo-container img {
+    height: 140px;
+    width: auto;
+    background-color: white;
+    border: 10px solid white;
+    margin: 0 !important;
+}
+
+.other-logos-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.other-logos-container img {
+    height: 100px;
+    width: auto;
+    background-color: white;
+    border: 8px solid white;
+    margin: 0 !important;
+    display: block !important;
+}
+
 footer {
     background-color: #000000;
     color: #888;
